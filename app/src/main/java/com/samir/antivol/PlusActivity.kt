@@ -8,6 +8,7 @@ import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.text.Html
 import android.widget.*
 import kotlin.math.roundToInt
 
@@ -42,13 +43,17 @@ class PlusActivity : Activity() {
         root.addView(sectionTitle("Comment ça marche"))
         val howCard = card()
         howCard.addView(TextView(this).apply {
-            text = "1. Entre le numéro à appeler en cas d'alerte.\n\n" +
-                "2. Choisis la sensibilité.\n\n" +
-                "3. Appuie sur « Activer la protection ».\n\n" +
-                "4. Laisse le téléphone dans la voiture : s'il bouge ou vibre, il appelle ton numéro.\n\n" +
-                "5. Rejette l'appel et va voir ta voiture."
+            text = Html.fromHtml(
+                "<b>1. Prépare le téléphone.</b> Laisse dans la voiture un téléphone avec une puce ayant au moins une unité de crédit, pour qu'il puisse appeler. Pas besoin d'internet." +
+                    "<br><br>" +
+                    "<b>2. Active la protection.</b> Entre ton numéro personnel (ou ton deuxième mobile), choisis la sensibilité, puis appuie sur « Activer la protection »." +
+                    "<br><br>" +
+                    "<b>3. Reçois l'alerte.</b> Si la voiture bouge, le téléphone t'appelle. Ne décroche pas : rejette l'appel et va voir ta voiture.",
+                Html.FROM_HTML_MODE_LEGACY
+            )
             textSize = 15f
             setTextColor(Color.rgb(35, 38, 45))
+            setLineSpacing(0f, 1.15f)
         })
         root.addView(howCard)
 
@@ -64,7 +69,7 @@ class PlusActivity : Activity() {
 
         // PARTAGER
         root.addView(
-            grayButton("➦ Partager l'application") { share() },
+            grayButton("Partager l'appli") { share() },
             LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 dp(56)
