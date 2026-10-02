@@ -9,7 +9,7 @@ import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.text.InputType
-import android.view.Gravity
+import android.view.View
 import android.widget.*
 import kotlin.math.roundToInt
 
@@ -38,6 +38,12 @@ class MainActivity : Activity() {
         val root = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setBackgroundColor(Color.rgb(247, 248, 250))
+            setPadding(
+                dp(20),
+                dp(28),
+                dp(20),
+                dp(20)
+            )
         }
 
         val scroll = ScrollView(this).apply {
@@ -46,54 +52,24 @@ class MainActivity : Activity() {
         }
 
         // =========================================================
-        // HEADER
+        // TITRE
         // =========================================================
-
-        val header = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-
-            setPadding(
-                dp(24),
-                dp(30),
-                dp(24),
-                dp(30)
-            )
-
-            setBackgroundColor(
-                Color.rgb(25, 28, 35)
-            )
-        }
-
-        val appName = TextView(this).apply {
-            text = "ANTIVOL"
-            textSize = 13f
-            setTextColor(
-                Color.rgb(150, 155, 165)
-            )
-            letterSpacing = 0.15f
-        }
 
         val title = TextView(this).apply {
             text = "Protection antivol"
             textSize = 29f
-            setTextColor(Color.WHITE)
-            setTypeface(
-                null,
-                Typeface.BOLD
-            )
+            setTextColor(Color.rgb(25, 28, 35))
+            setTypeface(null, Typeface.BOLD)
 
             setPadding(
-                0,
-                dp(8),
-                0,
-                0
+                dp(4),
+                dp(4),
+                dp(4),
+                dp(18)
             )
         }
 
-        header.addView(appName)
-        header.addView(title)
-
-        root.addView(header)
+        root.addView(title)
 
         // =========================================================
         // STATUT
@@ -103,7 +79,7 @@ class MainActivity : Activity() {
 
         val statusRow = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.CENTER_VERTICAL
+            gravity = android.view.Gravity.CENTER_VERTICAL
         }
 
         statusDot = TextView(this).apply {
@@ -120,10 +96,7 @@ class MainActivity : Activity() {
 
         statusText = TextView(this).apply {
             textSize = 17f
-            setTypeface(
-                null,
-                Typeface.BOLD
-            )
+            setTypeface(null, Typeface.BOLD)
         }
 
         statusRow.addView(statusDot)
@@ -138,9 +111,7 @@ class MainActivity : Activity() {
         // =========================================================
 
         root.addView(
-            createSectionTitle(
-                "Numéro d'alerte"
-            )
+            createSectionTitle("Numéro d'alerte")
         )
 
         val phoneCard = createCard()
@@ -151,8 +122,7 @@ class MainActivity : Activity() {
 
             textSize = 17f
 
-            inputType =
-                InputType.TYPE_CLASS_PHONE
+            inputType = InputType.TYPE_CLASS_PHONE
 
             setSingleLine(true)
 
@@ -164,18 +134,14 @@ class MainActivity : Activity() {
             )
 
             setText(
-                prefs.getString(
-                    "num",
-                    ""
-                )
+                prefs.getString("num", "")
             )
 
-            background =
-                roundedBackground(
-                    Color.WHITE,
-                    Color.rgb(220, 223, 229),
-                    12
-                )
+            background = roundedBackground(
+                Color.WHITE,
+                Color.rgb(220, 223, 229),
+                12
+            )
         }
 
         phoneCard.addView(phoneInput)
@@ -187,72 +153,53 @@ class MainActivity : Activity() {
         // =========================================================
 
         root.addView(
-            createSectionTitle(
-                "Sensibilité"
-            )
+            createSectionTitle("Sensibilité")
         )
 
         val sensitivityCard = createCard()
 
-        sensitivityGroup =
-            RadioGroup(this).apply {
-                orientation =
-                    RadioGroup.VERTICAL
-            }
+        sensitivityGroup = RadioGroup(this).apply {
+            orientation = RadioGroup.VERTICAL
+        }
 
         val currentMode =
-            prefs.getInt(
-                "mode",
-                0
-            ).coerceIn(0, 2)
+            prefs.getInt("mode", 0)
+                .coerceIn(0, 2)
 
         choices.forEachIndexed { index, choice ->
 
-            val radio =
-                RadioButton(this).apply {
+            val radio = RadioButton(this).apply {
 
-                    id = 100 + index
+                id = 100 + index
 
-                    text = choice.first
+                text = choice.first
 
-                    textSize = 16f
+                textSize = 16f
 
-                    setTextColor(
-                        Color.rgb(
-                            35,
-                            38,
-                            45
-                        )
-                    )
+                setTextColor(
+                    Color.rgb(35, 38, 45)
+                )
 
-                    setPadding(
-                        dp(4),
-                        dp(10),
-                        0,
-                        dp(10)
-                    )
+                setPadding(
+                    dp(4),
+                    dp(10),
+                    0,
+                    dp(10)
+                )
 
-                    isChecked =
-                        index == currentMode
-                }
+                isChecked =
+                    index == currentMode
+            }
 
-            sensitivityGroup.addView(
-                radio
-            )
+            sensitivityGroup.addView(radio)
 
             if (index < choices.lastIndex) {
 
-                val separator =
-                    android.view.View(this).apply {
-
-                        setBackgroundColor(
-                            Color.rgb(
-                                235,
-                                236,
-                                240
-                            )
-                        )
-                    }
+                val separator = View(this).apply {
+                    setBackgroundColor(
+                        Color.rgb(235, 236, 240)
+                    )
+                }
 
                 sensitivityGroup.addView(
                     separator,
@@ -268,111 +215,80 @@ class MainActivity : Activity() {
             sensitivityGroup
         )
 
-        root.addView(
-            sensitivityCard
-        )
+        root.addView(sensitivityCard)
 
         // =========================================================
         // BOUTONS
         // =========================================================
 
-        val buttons =
-            LinearLayout(this).apply {
+        val buttons = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
 
-                orientation =
-                    LinearLayout.VERTICAL
-
-                setPadding(
-                    dp(24),
-                    dp(22),
-                    dp(24),
-                    dp(30)
-                )
-            }
+            setPadding(
+                dp(4),
+                dp(22),
+                dp(4),
+                dp(20)
+            )
+        }
 
         // ---------------------------------------------------------
         // ACTIVER
         // ---------------------------------------------------------
 
-        val activateButton =
-            Button(this).apply {
+        val activateButton = Button(this).apply {
 
-                text =
-                    "Activer la protection"
+            text = "Activer la protection"
 
-                textSize = 15f
+            textSize = 15f
 
-                setTypeface(
-                    null,
-                    Typeface.BOLD
-                )
+            setTypeface(
+                null,
+                Typeface.BOLD
+            )
 
-                isAllCaps = false
+            isAllCaps = false
 
-                setTextColor(
-                    Color.WHITE
-                )
+            setTextColor(Color.WHITE)
 
-                background =
-                    roundedBackground(
-                        Color.rgb(
-                            28,
-                            125,
-                            76
-                        ),
-                        Color.TRANSPARENT,
-                        14
-                    )
+            background = roundedBackground(
+                Color.rgb(25, 145, 80),
+                Color.TRANSPARENT,
+                14
+            )
 
-                minimumHeight =
-                    dp(56)
-            }
+            minimumHeight = dp(56)
+        }
 
         // ---------------------------------------------------------
         // ARRÊTER
         // ---------------------------------------------------------
 
-        val stopButton =
-            Button(this).apply {
+        val stopButton = Button(this).apply {
 
-                text =
-                    "Arrêter la protection"
+            text = "Arrêter la protection"
 
-                textSize = 15f
+            textSize = 15f
 
-                setTypeface(
-                    null,
-                    Typeface.BOLD
-                )
+            setTypeface(
+                null,
+                Typeface.BOLD
+            )
 
-                isAllCaps = false
+            isAllCaps = false
 
-                setTextColor(
-                    Color.rgb(
-                        190,
-                        45,
-                        55
-                    )
-                )
+            setTextColor(
+                Color.rgb(190, 45, 55)
+            )
 
-                background =
-                    roundedBackground(
-                        Color.rgb(
-                            255,
-                            232,
-                            234
-                        ),
-                        Color.rgb(
-                            245,
-                            205,
-                            209
-                        ),
-                        14
-                    )
+            background = roundedBackground(
+                Color.rgb(255, 235, 237),
+                Color.rgb(245, 205, 209),
+                14
+            )
 
-                minimumHeight =
-                    dp(54)
-            }
+            minimumHeight = dp(54)
+        }
 
         buttons.addView(
             activateButton,
@@ -392,9 +308,7 @@ class MainActivity : Activity() {
             }
         )
 
-        root.addView(
-            buttons
-        )
+        root.addView(buttons)
 
         // =========================================================
         // STATUT INITIAL
@@ -408,33 +322,26 @@ class MainActivity : Activity() {
         )
 
         // =========================================================
-        // ACTIVATION
+        // ACTIVER
         // =========================================================
 
         activateButton.setOnClickListener {
 
-            val num =
-                phoneInput.text
-                    .toString()
-                    .trim()
+            val num = phoneInput.text
+                .toString()
+                .trim()
 
             // Exactement 10 chiffres
-            if (
-                !num.matches(
-                    Regex("^\\d{10}$")
-                )
-            ) {
+            if (!num.matches(Regex("^\\d{10}$"))) {
 
-                toast(
-                    "Numéro invalide"
-                )
+                toast("Numéro invalide")
 
                 phoneInput.requestFocus()
 
                 return@setOnClickListener
             }
 
-            // Permission appel
+            // Permission téléphone
             if (
                 checkSelfPermission(
                     Manifest.permission.CALL_PHONE
@@ -457,41 +364,24 @@ class MainActivity : Activity() {
             }
 
             val selectedId =
-                sensitivityGroup
-                    .checkedRadioButtonId
+                sensitivityGroup.checkedRadioButtonId
 
-            val index =
-                when (selectedId) {
-                    100 -> 0
-                    101 -> 1
-                    102 -> 2
-                    else -> 0
-                }
+            val index = when (selectedId) {
+                100 -> 0
+                101 -> 1
+                102 -> 2
+                else -> 0
+            }
 
-            val selected =
-                choices[index]
+            val selected = choices[index]
 
-            // Sauvegarde
             prefs.edit()
-                .putString(
-                    "num",
-                    num
-                )
-                .putInt(
-                    "mode",
-                    index
-                )
-                .putFloat(
-                    "seuil",
-                    selected.second
-                )
-                .putBoolean(
-                    "active",
-                    true
-                )
+                .putString("num", num)
+                .putInt("mode", index)
+                .putFloat("seuil", selected.second)
+                .putBoolean("active", true)
                 .apply()
 
-            // Arrête une éventuelle ancienne instance
             stopService(
                 Intent(
                     this,
@@ -499,7 +389,6 @@ class MainActivity : Activity() {
                 )
             )
 
-            // Démarre l'antivol
             startForegroundService(
                 Intent(
                     this,
@@ -509,13 +398,11 @@ class MainActivity : Activity() {
 
             updateStatus(true)
 
-            toast(
-                "Protection activée"
-            )
+            toast("Protection activée")
         }
 
         // =========================================================
-        // ARRÊT
+        // ARRÊTER
         // =========================================================
 
         stopButton.setOnClickListener {
@@ -528,17 +415,12 @@ class MainActivity : Activity() {
             )
 
             prefs.edit()
-                .putBoolean(
-                    "active",
-                    false
-                )
+                .putBoolean("active", false)
                 .apply()
 
             updateStatus(false)
 
-            toast(
-                "Protection arrêtée"
-            )
+            toast("Protection arrêtée")
         }
 
         setContentView(scroll)
@@ -548,8 +430,7 @@ class MainActivity : Activity() {
     // CARTE
     // =============================================================
 
-    private fun createCard():
-            LinearLayout {
+    private fun createCard(): LinearLayout {
 
         return LinearLayout(this).apply {
 
@@ -566,11 +447,7 @@ class MainActivity : Activity() {
             background =
                 roundedBackground(
                     Color.WHITE,
-                    Color.rgb(
-                        232,
-                        234,
-                        238
-                    ),
+                    Color.rgb(232, 234, 238),
                     16
                 )
 
@@ -581,9 +458,9 @@ class MainActivity : Activity() {
                 ).apply {
 
                     setMargins(
-                        dp(20),
-                        dp(8),
-                        dp(20),
+                        0,
+                        dp(6),
+                        0,
                         dp(8)
                     )
                 }
@@ -591,7 +468,7 @@ class MainActivity : Activity() {
     }
 
     // =============================================================
-    // TITRE SECTION
+    // TITRE DE SECTION
     // =============================================================
 
     private fun createSectionTitle(
@@ -610,24 +487,20 @@ class MainActivity : Activity() {
             )
 
             setTextColor(
-                Color.rgb(
-                    90,
-                    95,
-                    105
-                )
+                Color.rgb(90, 95, 105)
             )
 
             setPadding(
-                dp(24),
+                dp(4),
                 dp(18),
-                dp(24),
-                dp(4)
+                dp(4),
+                dp(5)
             )
         }
     }
 
     // =============================================================
-    // BACKGROUND
+    // BACKGROUND ARRONDI
     // =============================================================
 
     private fun roundedBackground(
@@ -644,8 +517,7 @@ class MainActivity : Activity() {
                 dp(radius).toFloat()
 
             if (
-                strokeColor !=
-                Color.TRANSPARENT
+                strokeColor != Color.TRANSPARENT
             ) {
 
                 setStroke(
@@ -671,17 +543,17 @@ class MainActivity : Activity() {
 
             statusText.setTextColor(
                 Color.rgb(
-                    28,
-                    150,
-                    85
+                    25,
+                    145,
+                    80
                 )
             )
 
             statusDot.setTextColor(
                 Color.rgb(
-                    28,
-                    170,
-                    90
+                    25,
+                    165,
+                    85
                 )
             )
 
@@ -723,7 +595,7 @@ class MainActivity : Activity() {
     }
 
     // =============================================================
-    // MESSAGE
+    // TOAST
     // =============================================================
 
     private fun toast(
@@ -736,4 +608,4 @@ class MainActivity : Activity() {
             Toast.LENGTH_LONG
         ).show()
     }
-} 
+}
