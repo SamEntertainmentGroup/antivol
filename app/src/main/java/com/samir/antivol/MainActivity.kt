@@ -25,7 +25,7 @@ class MainActivity : Activity() {
         }
         val bar = SeekBar(this).apply {
             max = 9
-            progress = prefs.getInt("niveau", 5) - 1
+            progress = prefs.getInt("niveau", 7) - 1
         }
         fun maj() { label.text = "Sensibilité : ${bar.progress + 1} / 10" }
         maj()
@@ -53,7 +53,7 @@ class MainActivity : Activity() {
                 return@setOnClickListener
             }
             val niveau = bar.progress + 1
-            val seuil = 4.2f - niveau * 0.4f
+            val seuil = 1.5f - niveau * 0.13f
             prefs.edit()
                 .putString("num", num)
                 .putInt("niveau", niveau)
