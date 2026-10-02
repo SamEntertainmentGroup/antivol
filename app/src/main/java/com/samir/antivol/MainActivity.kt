@@ -8,6 +8,7 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
 import android.provider.Settings
@@ -23,7 +24,10 @@ class MainActivity : Activity() {
     private lateinit var statusDot: TextView
     private lateinit var phoneInput: EditText
     private lateinit var sensitivityGroup: RadioGroup
-    private lateinit var batteryCard: LinearLayout
+    private lateinit var configCard: LinearLayout
+    private lateinit var callBtn: Button
+    private lateinit var notifBtn: Button
+    private lateinit var batBtn: Button
 
     private val choices = listOf(
         "Normal" to 0.8f,
@@ -74,34 +78,31 @@ class MainActivity : Activity() {
         statusCard.addView(statusRow)
         root.addView(statusCard)
 
-        // AVERTISSEMENT BATTERIE
-        batteryCard = createCard().apply {
+        // CONFIGURATION (disparaît quand tout est vert)
+        configCard = createCard().apply {
             background = roundedBackground(
                 Color.rgb(255, 243, 224),
                 Color.rgb(255, 204, 128),
                 16
             )
         }
-        batteryCard.addView(TextView(this).apply {
-            text = "⚠ Action requise"
+        configCard.addView(TextView(this).apply {
+            text = "⚠ Configuration requise"
             textSize = 16f
             setTypeface(null, Typeface.BOLD)
             setTextColor(Color.rgb(160, 90, 0))
+            setPadding(0, 0, 0, dp(6))
         })
-        batteryCard.addView(TextView(this).apply {
-            text = "L'optimisation batterie est active : Android peut arrêter l'antivol et il ne fonctionnera pas. Désactive-la pour continuer."
-            textSize = 14f
-            setTextColor(Color.rgb(110, 70, 10))
-            setPadding(0, dp(6), 0, dp(10))
-        })
-        batteryCard.addView(Button(this).apply {
-            text = "Désactiver l'optimisation batterie"
-            isAllCaps = false
-            setTextColor(Color.WHITE)
-            background = roundedBackground(Color.rgb(230, 126, 0), Color.TRANSPARENT, 12)
-            setOnClickListener { askBattery() }
-        })
-        root.addView(batteryCard)
+        callBtn = addRow(configCard, "Autorisation d'appel") {
+            requestPermissions(arrayOf(Manifest.permission.CALL_PHONE), 1)
+        }
+        notifBtn = addRow(configCard, "Autorisation de notification") {
+            requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 2)
+        }
+        batBtn = addRow(configCard, "Batterie sans restriction") {
+            askBattery()
+        }
+        root.addView(configCard)
 
         // NUMÉRO
         root.addView(createSectionTitle("Numéro d'alerte"))
@@ -183,6 +184,7 @@ class MainActivity : Activity() {
         root.addView(buttons)
 
         updateStatus(prefs.getBoolean("active", false))
+        refreshConfig()
 
         // ACTIVER
         activateButton.setOnClickListener {
@@ -193,24 +195,10 @@ class MainActivity : Activity() {
                 return@setOnClickListener
             }
 
-            if (checkSelfPermission(Manifest.permission.CALL_PHONE)
-                != PackageManager.PERMISSION_GRANTED
-            ) {
-                requestPermissions(
-                    arrayOf(
-                        Manifest.permission.CALL_PHONE,
-                        Manifest.permission.POST_NOTIFICATIONS
-                    ),
-                    1
-                )
-                toast("Autorise les permissions puis appuie à nouveau")
-                return@setOnClickListener
-            }
-
-            if (!batteryOk()) {
-                refreshBattery()
-                toast("Désactive d'abord l'optimisation batterie")
-                askBattery()
+            if (!allOk()) {
+                refreshConfig()
+                toast("Termine d'abord la configuration en haut")
+                scroll.smoothScrollTo(0, 0)
                 return@setOnClickListener
             }
 
@@ -241,17 +229,48 @@ class MainActivity : Activity() {
 
     override fun onResume() {
         super.onResume()
-        refreshBattery()
+        refreshConfig()
     }
 
-    // BATTERIE
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        refreshConfig()
+        if (grantResults.isNotEmpty() && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+            toast("Autorise dans les réglages de l'appli")
+            startActivity(
+                Intent(
+                    Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                    Uri.parse("package:$packageName")
+                )
+            )
+        }
+    }
+
+    // ÉTAT DES AUTORISATIONS
+    private fun callOk() =
+        checkSelfPermission(Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED
+
+    private fun notifOk() =
+        Build.VERSION.SDK_INT < 33 ||
+            checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) ==
+            PackageManager.PERMISSION_GRANTED
+
     private fun batteryOk(): Boolean {
         val pm = getSystemService(POWER_SERVICE) as PowerManager
         return pm.isIgnoringBatteryOptimizations(packageName)
     }
 
-    private fun refreshBattery() {
-        batteryCard.visibility = if (batteryOk()) View.GONE else View.VISIBLE
+    private fun allOk() = callOk() && notifOk() && batteryOk()
+
+    private fun refreshConfig() {
+        setBtn(callBtn, callOk())
+        setBtn(notifBtn, notifOk())
+        setBtn(batBtn, batteryOk())
+        configCard.visibility = if (allOk()) View.GONE else View.VISIBLE
     }
 
     private fun askBattery() {
@@ -271,51 +290,22 @@ class MainActivity : Activity() {
     }
 
     // OUTILS D'INTERFACE
-    private fun createCard(): LinearLayout {
-        return LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            setPadding(dp(18), dp(16), dp(18), dp(16))
-            background = roundedBackground(Color.WHITE, Color.rgb(232, 234, 238), 16)
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            ).apply { setMargins(0, dp(6), 0, dp(8)) }
+    private fun addRow(card: LinearLayout, label: String, onClick: () -> Unit): Button {
+        val row = LinearLayout(this).apply {
+            orientation = LinearLayout.HORIZONTAL
+            gravity = Gravity.CENTER_VERTICAL
+            setPadding(0, dp(6), 0, dp(6))
         }
-    }
-
-    private fun createSectionTitle(text: String): TextView {
-        return TextView(this).apply {
-            this.text = text
+        row.addView(
+            TextView(this).apply {
+                text = label
+                textSize = 15f
+                setTextColor(Color.rgb(35, 38, 45))
+            },
+            LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+        )
+        val btn = Button(this).apply {
+            isAllCaps = false
             textSize = 13f
-            setTypeface(null, Typeface.BOLD)
-            setTextColor(Color.rgb(90, 95, 105))
-            setPadding(dp(4), dp(18), dp(4), dp(5))
+            setOnClickListener { onClick() }
         }
-    }
-
-    private fun roundedBackground(color: Int, strokeColor: Int, radius: Int): GradientDrawable {
-        return GradientDrawable().apply {
-            setColor(color)
-            cornerRadius = dp(radius).toFloat()
-            if (strokeColor != Color.TRANSPARENT) setStroke(dp(1), strokeColor)
-        }
-    }
-
-    private fun updateStatus(active: Boolean) {
-        if (active) {
-            statusText.text = "Protection active"
-            statusText.setTextColor(Color.rgb(25, 145, 80))
-            statusDot.setTextColor(Color.rgb(25, 165, 85))
-        } else {
-            statusText.text = "Protection non active"
-            statusText.setTextColor(Color.rgb(90, 94, 102))
-            statusDot.setTextColor(Color.rgb(150, 155, 165))
-        }
-    }
-
-    private fun dp(value: Int): Int =
-        (value * resources.displayMetrics.density).roundToInt()
-
-    private fun toast(message: String) =
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
-}
