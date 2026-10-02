@@ -17,6 +17,8 @@ class PlusActivity : Activity() {
     // Remplace par ton numéro WhatsApp : indicatif sans + ni 0 devant (ex : 213680912224)
     private val SUPPORT_WHATSAPP = "213555123456"
 
+    private val NOIR = Color.rgb(35, 38, 45)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -52,24 +54,23 @@ class PlusActivity : Activity() {
                 Html.FROM_HTML_MODE_LEGACY
             )
             textSize = 15f
-            setTextColor(Color.rgb(35, 38, 45))
+            setTextColor(NOIR)
             setLineSpacing(0f, 1.15f)
         })
         root.addView(howCard)
 
-        // CONTACT
-        root.addView(sectionTitle("Contact"))
+        // CONTACTER LE SUPPORT
         root.addView(
             grayButton("Contacter le support") { openSupport() },
             LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 dp(56)
-            )
+            ).apply { topMargin = dp(16) }
         )
 
         // PARTAGER
         root.addView(
-            grayButton("Partager l'appli") { share() },
+            grayButton("🔗 Partager l'application") { share() },
             LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 dp(56)
@@ -90,10 +91,10 @@ class PlusActivity : Activity() {
 
     // ACTIONS
     private fun openSupport() {
-        val msg = "Bonjour, j'ai besoin d'aide avec l'appli Antivol.\n\n" +
+        val msg = "Bonjour, j'ai besoin d'aide avec l'application Antivol.\n\n" +
             "Téléphone : ${Build.MANUFACTURER} ${Build.MODEL}\n" +
             "Android : ${Build.VERSION.RELEASE}\n" +
-            "Version de l'appli : ${versionName()}\n\n" +
+            "Version de l'application : ${versionName()}\n\n" +
             "Mon problème : "
         val uri = Uri.parse("https://wa.me/$SUPPORT_WHATSAPP?text=${Uri.encode(msg)}")
         try {
@@ -107,10 +108,10 @@ class PlusActivity : Activity() {
             type = "text/plain"
             putExtra(
                 Intent.EXTRA_TEXT,
-                "Antivol : une appli qui appelle ton téléphone si ta voiture bouge pendant la nuit."
+                "Antivol : une application qui appelle ton téléphone si ta voiture bouge pendant la nuit."
             )
         }
-        startActivity(Intent.createChooser(intent, "Partager l'appli"))
+        startActivity(Intent.createChooser(intent, "Partager l'application"))
     }
 
     private fun versionName(): String =
@@ -126,7 +127,7 @@ class PlusActivity : Activity() {
             text = label
             isAllCaps = false
             textSize = 16f
-            setTextColor(Color.rgb(35, 38, 45))
+            setTextColor(NOIR)
             background = roundedBackground(
                 Color.rgb(235, 236, 239),
                 Color.rgb(220, 223, 229),
@@ -142,12 +143,8 @@ class PlusActivity : Activity() {
             text = label
             isAllCaps = false
             textSize = 16f
-            setTextColor(Color.rgb(25, 118, 210))
-            background = roundedBackground(
-                Color.WHITE,
-                Color.rgb(25, 118, 210),
-                12
-            )
+            setTextColor(NOIR)
+            background = roundedBackground(Color.WHITE, NOIR, 12)
             stateListAnimator = null
             setOnClickListener { onClick() }
         }
