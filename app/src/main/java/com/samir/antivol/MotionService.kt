@@ -206,21 +206,6 @@ class MotionService : Service(), SensorEventListener {
             return
         }
 
-        // Allume l'écran avant de lancer l'appel
-        val powerManager =
-            getSystemService(
-                Context.POWER_SERVICE
-            ) as PowerManager
-
-        val screenWakeLock =
-            powerManager.newWakeLock(
-                PowerManager.SCREEN_BRIGHT_WAKE_LOCK or
-                        PowerManager.ACQUIRE_CAUSES_WAKEUP,
-                "antivol:call_screen"
-            )
-
-        screenWakeLock.acquire(5000L)
-
         val uri =
             Uri.parse(
                 "tel:$num"
