@@ -58,4 +58,22 @@ class MainActivity : Activity() {
                 .putInt("mode", idx)
                 .putFloat("seuil", choix[idx].second)
                 .putBoolean("ecran", cb.isChecked)
-                .apply() 
+                .apply()
+            stopService(Intent(this, MotionService::class.java))
+            startForegroundService(Intent(this, MotionService::class.java))
+            toast("Surveillance activée (${choix[idx].first})")
+        }
+        off.setOnClickListener {
+            stopService(Intent(this, MotionService::class.java))
+            toast("Arrêtée")
+        }
+
+        setContentView(LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(48, 96, 48, 48)
+            addView(et); addView(titre); addView(rg); addView(cb); addView(on); addView(off)
+        })
+    }
+
+    private fun toast(m: String) = Toast.makeText(this, m, Toast.LENGTH_LONG).show()
+}
