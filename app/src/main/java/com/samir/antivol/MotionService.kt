@@ -33,7 +33,7 @@ class MotionService : Service(), SensorEventListener {
 
         // Pause entre deux appels
         private const val PAUSE =
-            30_000L
+            60_000L
     }
 
     private var seuil = 0.8f
