@@ -70,16 +70,7 @@ class MainActivity : Activity() {
             elevation = dp(8).toFloat()
             visibility = View.GONE
         }
-
-        // TITRE
-        root.addView(TextView(this).apply {
-            text = "Protection antivol"
-            textSize = 29f
-            setTextColor(Color.rgb(25, 28, 35))
-            setTypeface(null, Typeface.BOLD)
-            setPadding(dp(4), dp(4), dp(4), dp(18))
-        })
-
+        
         // STATUT
         statusCard = createCard().apply {
             orientation = LinearLayout.HORIZONTAL
