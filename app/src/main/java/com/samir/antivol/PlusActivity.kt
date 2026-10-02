@@ -8,13 +8,12 @@ import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.view.Gravity
 import android.widget.*
 import kotlin.math.roundToInt
 
 class PlusActivity : Activity() {
 
-    // Remplace par ton numéro WhatsApp : indicatif sans + ni 0 devant (ex : 213555123456)
+    // Remplace par ton numéro WhatsApp : indicatif sans + ni 0 devant (ex : 213680912224)
     private val SUPPORT_WHATSAPP = "213555123456"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,26 +29,14 @@ class PlusActivity : Activity() {
             addView(root)
         }
 
-        // EN-TÊTE
-        val header = LinearLayout(this).apply {
-            orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.CENTER_VERTICAL
-            setPadding(dp(4), dp(4), dp(4), dp(14))
-        }
-        header.addView(TextView(this).apply {
-            text = "←"
-            textSize = 28f
-            setTextColor(Color.rgb(25, 28, 35))
-            setPadding(dp(4), dp(4), dp(18), dp(4))
-            setOnClickListener { finish() }
-        })
-        header.addView(TextView(this).apply {
+        // TITRE
+        root.addView(TextView(this).apply {
             text = "Plus"
             textSize = 29f
             setTextColor(Color.rgb(25, 28, 35))
             setTypeface(null, Typeface.BOLD)
+            setPadding(dp(4), dp(4), dp(4), dp(14))
         })
-        root.addView(header)
 
         // COMMENT ÇA MARCHE
         root.addView(sectionTitle("Comment ça marche"))
@@ -65,70 +52,33 @@ class PlusActivity : Activity() {
         })
         root.addView(howCard)
 
-        // SUPPORT
-        root.addView(sectionTitle("Aide"))
-        val helpCard = card()
-        helpCard.addView(TextView(this).apply {
-            text = "Un problème ou une question ? Écris-nous sur WhatsApp. " +
-                "Le message contient déjà les infos de ton téléphone."
-            textSize = 15f
-            setTextColor(Color.rgb(35, 38, 45))
-        })
-        helpCard.addView(
-            actionButton("Contacter le support", Color.rgb(37, 160, 90), Color.WHITE, Color.TRANSPARENT) {
-                openSupport()
-            },
+        // CONTACT
+        root.addView(sectionTitle("Contact"))
+        root.addView(
+            grayButton("Contacter le support") { openSupport() },
             LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
-                dp(52)
-            ).apply { topMargin = dp(14) }
+                dp(56)
+            )
         )
-        root.addView(helpCard)
 
         // PARTAGER
-        root.addView(sectionTitle("Partager"))
-        val shareCard = card()
-        shareCard.addView(TextView(this).apply {
-            text = "Fais découvrir l'appli à tes amis et à ta famille."
-            textSize = 15f
-            setTextColor(Color.rgb(35, 38, 45))
-        })
-        shareCard.addView(
-            actionButton("Partager l'appli", Color.WHITE, Color.rgb(25, 118, 210), Color.rgb(25, 118, 210)) {
-                share()
-            },
+        root.addView(
+            grayButton("Partager l'appli") { share() },
             LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
-                dp(52)
-            ).apply { topMargin = dp(14) }
+                dp(56)
+            ).apply { topMargin = dp(12) }
         )
-        root.addView(shareCard)
 
-        // PREMIUM (à venir)
-        root.addView(sectionTitle("Premium"))
-        val premiumCard = card()
-        premiumCard.addView(TextView(this).apply {
-            text = "⭐ Bientôt disponible"
-            textSize = 16f
-            setTypeface(null, Typeface.BOLD)
-            setTextColor(Color.rgb(35, 38, 45))
-        })
-        premiumCard.addView(TextView(this).apply {
-            text = "Réglages avancés et plus d'options."
-            textSize = 14f
-            setTextColor(Color.rgb(90, 95, 105))
-            setPadding(0, dp(4), 0, 0)
-        })
-        root.addView(premiumCard)
-
-        // VERSION
-        root.addView(TextView(this).apply {
-            text = "Antivol · version ${versionName()}"
-            textSize = 13f
-            gravity = Gravity.CENTER
-            setTextColor(Color.rgb(140, 145, 155))
-            setPadding(0, dp(22), 0, dp(10))
-        })
+        // RETOUR
+        root.addView(
+            backButton("Retour à l'accueil") { finish() },
+            LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                dp(56)
+            ).apply { topMargin = dp(28) }
+        )
 
         setContentView(scroll)
     }
@@ -166,19 +116,33 @@ class PlusActivity : Activity() {
         }
 
     // OUTILS D'INTERFACE
-    private fun actionButton(
-        label: String,
-        bg: Int,
-        fg: Int,
-        stroke: Int,
-        onClick: () -> Unit
-    ): Button {
+    private fun grayButton(label: String, onClick: () -> Unit): Button {
         return Button(this).apply {
             text = label
             isAllCaps = false
             textSize = 16f
-            setTextColor(fg)
-            background = roundedBackground(bg, stroke, 12)
+            setTextColor(Color.rgb(35, 38, 45))
+            background = roundedBackground(
+                Color.rgb(235, 236, 239),
+                Color.rgb(220, 223, 229),
+                12
+            )
+            stateListAnimator = null
+            setOnClickListener { onClick() }
+        }
+    }
+
+    private fun backButton(label: String, onClick: () -> Unit): Button {
+        return Button(this).apply {
+            text = label
+            isAllCaps = false
+            textSize = 16f
+            setTextColor(Color.rgb(25, 118, 210))
+            background = roundedBackground(
+                Color.WHITE,
+                Color.rgb(25, 118, 210),
+                12
+            )
             stateListAnimator = null
             setOnClickListener { onClick() }
         }
