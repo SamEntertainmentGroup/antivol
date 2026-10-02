@@ -58,4 +58,4 @@ class MainActivity : Activity() {
                 .putInt("mode", idx)
                 .putFloat("seuil", choix[idx].second)
                 .putBoolean("ecran", cb.isChecked)
-                .apply()
+                .apply() 
