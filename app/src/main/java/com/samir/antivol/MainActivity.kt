@@ -285,7 +285,7 @@ class MainActivity : Activity() {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 dp(56)
             ).apply {
-                topMargin = dp(12)
+                topMargin = dp(30)
             }
         )
         
