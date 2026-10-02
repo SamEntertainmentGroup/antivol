@@ -38,7 +38,7 @@ class MotionService : Service(), SensorEventListener {
         sm = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         sm.unregisterListener(this)
         sm.registerListener(this, sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-            SensorManager.SENSOR_DELAY_NORMAL)
+            SensorManager.SENSOR_DELAY_UI)
         return START_STICKY
     }
 
@@ -53,9 +53,18 @@ class MotionService : Service(), SensorEventListener {
         }
     }
 
+    @Suppress("DEPRECATION")
+    private fun allumerEcran() {
+        (getSystemService(Context.POWER_SERVICE) as PowerManager)
+            .newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP, "antivol:ecran")
+            .acquire(5000)
+    }
+
     private fun appeler() {
-        val num = getSharedPreferences("p", MODE_PRIVATE).getString("num", "") ?: ""
+        val p = getSharedPreferences("p", MODE_PRIVATE)
+        val num = p.getString("num", "") ?: ""
         if (num.isEmpty()) return
+        if (p.getBoolean("ecran", false)) allumerEcran()
         try {
             startActivity(Intent(Intent.ACTION_CALL, Uri.parse("tel:$num"))
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
