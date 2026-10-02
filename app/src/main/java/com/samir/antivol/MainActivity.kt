@@ -229,10 +229,10 @@ class MainActivity : Activity() {
             text = "Activer la protection"
             isAllCaps = false
             textSize = 16f
-            setTextColor(Color.WHITE)
+            setTextColor(Color.rgb(35, 38, 45))
             background = roundedBackground(
-                Color.rgb(25, 145, 80),
-                Color.TRANSPARENT,
+                Color.WHITE,
+                Color.rgb(220, 223, 229),
                 12
             )
             stateListAnimator = null
@@ -242,10 +242,10 @@ class MainActivity : Activity() {
             text = "Arrêter la protection"
             isAllCaps = false
             textSize = 16f
-            setTextColor(Color.WHITE)
+            setTextColor(Color.rgb(35, 38, 45))
             background = roundedBackground(
-                Color.rgb(200, 50, 60),
-                Color.TRANSPARENT,
+                Color.WHITE,
+                Color.rgb(220, 223, 229),
                 12
             )
             stateListAnimator = null
