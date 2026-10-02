@@ -39,9 +39,9 @@ class MainActivity : Activity() {
     private val hideBanner = Runnable { banner.visibility = View.GONE }
 
     private val choices = listOf(
-        "Normal" to 0.8f,
-        "Sensible" to 0.5f,
-        "Extrême" to 0.25f
+        "Normal" to 0.30f,
+        "Sensible" to 0.10f,
+        "Extrême" to 0.03f
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -136,8 +136,11 @@ class MainActivity : Activity() {
 
         callBtn = addRow(configCard, "Autorisation d'appel") {
             requestPermissions(
-                arrayOf(Manifest.permission.CALL_PHONE),
-                1
+                arrayOf(
+                Manifest.permission.CALL_PHONE,
+                Manifest.permission.ANSWER_PHONE_CALLS
+            ),
+             1
             )
         }
 
