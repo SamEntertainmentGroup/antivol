@@ -309,3 +309,70 @@ class MainActivity : Activity() {
             textSize = 13f
             setOnClickListener { onClick() }
         }
+        row.addView(
+            btn,
+            LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, dp(44))
+        )
+        card.addView(row)
+        return btn
+    }
+
+    private fun setBtn(btn: Button, ok: Boolean) {
+        btn.isEnabled = !ok
+        btn.text = if (ok) "✓ OK" else "Autoriser"
+        btn.setTextColor(Color.WHITE)
+        btn.background = roundedBackground(
+            if (ok) Color.rgb(25, 145, 80) else Color.rgb(230, 126, 0),
+            Color.TRANSPARENT,
+            12
+        )
+    }
+
+    private fun createCard(): LinearLayout {
+        return LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(dp(18), dp(16), dp(18), dp(16))
+            background = roundedBackground(Color.WHITE, Color.rgb(232, 234, 238), 16)
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply { setMargins(0, dp(6), 0, dp(8)) }
+        }
+    }
+
+    private fun createSectionTitle(text: String): TextView {
+        return TextView(this).apply {
+            this.text = text
+            textSize = 13f
+            setTypeface(null, Typeface.BOLD)
+            setTextColor(Color.rgb(90, 95, 105))
+            setPadding(dp(4), dp(18), dp(4), dp(5))
+        }
+    }
+
+    private fun roundedBackground(color: Int, strokeColor: Int, radius: Int): GradientDrawable {
+        return GradientDrawable().apply {
+            setColor(color)
+            cornerRadius = dp(radius).toFloat()
+            if (strokeColor != Color.TRANSPARENT) setStroke(dp(1), strokeColor)
+        }
+    }
+
+    private fun updateStatus(active: Boolean) {
+        if (active) {
+            statusText.text = "Protection active"
+            statusText.setTextColor(Color.rgb(25, 145, 80))
+            statusDot.setTextColor(Color.rgb(25, 165, 85))
+        } else {
+            statusText.text = "Protection non active"
+            statusText.setTextColor(Color.rgb(90, 94, 102))
+            statusDot.setTextColor(Color.rgb(150, 155, 165))
+        }
+    }
+
+    private fun dp(value: Int): Int =
+        (value * resources.displayMetrics.density).roundToInt()
+
+    private fun toast(message: String) =
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+}
