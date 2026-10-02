@@ -158,7 +158,7 @@ class MainActivity : Activity() {
         root.addView(configCard)
 
         // NUMÉRO
-        root.addView(createSectionTitle("Numéro d'alerte"))
+        root.addView(createSectionTitle("Numéro à appeler en cas d’alerte"))
 
         val phoneCard = createCard()
 
