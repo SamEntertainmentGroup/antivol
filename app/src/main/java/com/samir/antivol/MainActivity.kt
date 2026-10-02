@@ -231,7 +231,7 @@ class MainActivity : Activity() {
             textSize = 16f
             setTextColor(Color.rgb(35, 38, 45))
             background = roundedBackground(
-                Color.rgb(242, 243, 245),
+                Color.rgb(235, 236, 239),
                 Color.rgb(220, 223, 229),
                 12
             )
@@ -244,7 +244,7 @@ class MainActivity : Activity() {
             textSize = 16f
             setTextColor(Color.rgb(35, 38, 45))
             background = roundedBackground(
-                Color.rgb(242, 243, 245),
+                Color.rgb(235, 236, 239),
                 Color.rgb(220, 223, 229),
                 12
             )
@@ -713,7 +713,11 @@ class MainActivity : Activity() {
 
         statusCard.background =
             roundedBackground(
-                Color.WHITE,
+                if (active) {
+                    Color.rgb(230, 245, 236)
+                } else {
+                    Color.rgb(250, 232, 234)
+                },
                 color,
                 16
             )
