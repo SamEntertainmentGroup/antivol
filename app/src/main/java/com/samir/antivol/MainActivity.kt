@@ -276,10 +276,10 @@ class MainActivity : Activity() {
             text = "Plus"
             isAllCaps = false
             textSize = 16f
-            setTextColor(Color.rgb(25, 118, 210))
+            setTextColor(Color.rgb(35, 38, 45))
             background = roundedBackground(
                 Color.WHITE,
-                Color.rgb(25, 118, 210),
+                Color.rgb(35, 38, 45),
                 12
             )
             stateListAnimator = null
