@@ -226,30 +226,30 @@ class MainActivity : Activity() {
         }
 
         val activateButton = Button(this).apply {
-    text = "Activer la protection"
-    isAllCaps = false
-    textSize = 16f
-    setTextColor(Color.WHITE)
-    background = roundedBackground(
-        Color.rgb(25, 145, 80),
-        Color.TRANSPARENT,
-        12
-    )
-    stateListAnimator = null
-}
+            text = "Activer la protection"
+            isAllCaps = false
+            textSize = 16f
+            setTextColor(Color.WHITE)
+            background = roundedBackground(
+                Color.rgb(25, 145, 80),
+                Color.TRANSPARENT,
+                12
+            )
+            stateListAnimator = null
+        }
 
-val stopButton = Button(this).apply {
-    text = "Arrêter la protection"
-    isAllCaps = false
-    textSize = 16f
-    setTextColor(Color.WHITE)
-    background = roundedBackground(
-        Color.rgb(200, 50, 60),
-        Color.TRANSPARENT,
-        12
-       )
-    stateListAnimator = null
-           }
+        val stopButton = Button(this).apply {
+            text = "Arrêter la protection"
+            isAllCaps = false
+            textSize = 16f
+            setTextColor(Color.WHITE)
+            background = roundedBackground(
+                Color.rgb(200, 50, 60),
+                Color.TRANSPARENT,
+                12
+            )
+            stateListAnimator = null
+        }
 
         buttons.addView(
             activateButton,
