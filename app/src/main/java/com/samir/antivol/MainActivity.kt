@@ -6,82 +6,67 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.InputType
-import android.widget.Button
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.Toast
+import android.widget.*
 
 class MainActivity : Activity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
+    override fun onCreate(b: Bundle?) {
+        super.onCreate(b)
         val prefs = getSharedPreferences("p", MODE_PRIVATE)
 
-        val number = EditText(this).apply {
+        val et = EditText(this).apply {
             hint = "Numéro à appeler"
             inputType = InputType.TYPE_CLASS_PHONE
             setText(prefs.getString("num", ""))
         }
 
-        val activate = Button(this).apply {
-            text = "Activer (armé dans 30 s)"
+        val titre = TextView(this).apply {
+            text = "Sensibilité"
+            textSize = 18f
+            setPadding(0, 48, 0, 0)
+        }
+        val choix = listOf("Forte" to 1.2f, "Moyenne" to 2.0f, "Faible" to 3.5f)
+        val actuel = prefs.getFloat("seuil", 2.0f)
+        val rg = RadioGroup(this)
+        choix.forEachIndexed { i, (nom, valeur) ->
+            rg.addView(RadioButton(this).apply {
+                id = i + 1
+                text = nom
+                isChecked = valeur == actuel
+            })
         }
 
-        val stop = Button(this).apply {
-            text = "Arrêter"
-        }
+        val on = Button(this).apply { text = "Activer (armé dans 30 s)" }
+        val off = Button(this).apply { text = "Arrêter" }
 
-        activate.setOnClickListener {
-            val num = number.text.toString().trim()
-
-            if (num.length < 8) {
-                toast("Numéro invalide")
+        on.setOnClickListener {
+            val num = et.text.toString().trim()
+            if (num.length < 8) { toast("Numéro invalide"); return@setOnClickListener }
+            if (checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(arrayOf(Manifest.permission.CALL_PHONE,
+                    Manifest.permission.POST_NOTIFICATIONS), 1)
+                toast("Autorise puis appuie à nouveau sur Activer")
                 return@setOnClickListener
             }
-
-            if (checkSelfPermission(Manifest.permission.CALL_PHONE)
-                != PackageManager.PERMISSION_GRANTED
-            ) {
-                requestPermissions(
-                    arrayOf(
-                        Manifest.permission.CALL_PHONE,
-                        Manifest.permission.POST_NOTIFICATIONS
-                    ),
-                    1
-                )
-
-                toast("Autorise les permissions puis appuie à nouveau sur Activer")
-                return@setOnClickListener
-            }
-
-            prefs.edit().putString("num", num).apply()
-
-            startForegroundService(
-                Intent(this, MotionService::class.java)
-            )
-
-            toast("Surveillance activée dans 30 s")
-        }
-
-        stop.setOnClickListener {
+            val idx = (rg.checkedRadioButtonId - 1).coerceIn(0, choix.size - 1)
+            prefs.edit()
+                .putString("num", num)
+                .putFloat("seuil", choix[idx].second)
+                .apply()
             stopService(Intent(this, MotionService::class.java))
-            toast("Surveillance arrêtée")
+            startForegroundService(Intent(this, MotionService::class.java))
+            toast("Surveillance activée (${choix[idx].first})")
+        }
+        off.setOnClickListener {
+            stopService(Intent(this, MotionService::class.java))
+            toast("Arrêtée")
         }
 
-        setContentView(
-            LinearLayout(this).apply {
-                orientation = LinearLayout.VERTICAL
-                setPadding(48, 96, 48, 48)
-
-                addView(number)
-                addView(activate)
-                addView(stop)
-            }
-        )
+        setContentView(LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(48, 96, 48, 48)
+            addView(et); addView(titre); addView(rg); addView(on); addView(off)
+        })
     }
 
-    private fun toast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
-    }
+    private fun toast(m: String) = Toast.makeText(this, m, Toast.LENGTH_LONG).show()
 }
