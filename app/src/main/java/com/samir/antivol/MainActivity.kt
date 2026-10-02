@@ -19,21 +19,21 @@ class MainActivity : Activity() {
             setText(prefs.getString("num", ""))
         }
 
-        val label = TextView(this).apply {
+        val titre = TextView(this).apply {
+            text = "Sensibilité"
             textSize = 18f
             setPadding(0, 48, 0, 0)
         }
-        val bar = SeekBar(this).apply {
-            max = 9
-            progress = prefs.getInt("niveau", 7) - 1
+        val choix = listOf("Normal" to 0.8f, "Sensible" to 0.5f, "Extrême" to 0.25f)
+        val rg = RadioGroup(this)
+        val actuel = prefs.getInt("mode", 0).coerceIn(0, 2)
+        choix.forEachIndexed { i, (nom, _) ->
+            rg.addView(RadioButton(this).apply {
+                id = i + 1
+                text = nom
+                isChecked = i == actuel
+            })
         }
-        fun maj() { label.text = "Sensibilité : ${bar.progress + 1} / 10" }
-        maj()
-        bar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(s: SeekBar?, p: Int, u: Boolean) = maj()
-            override fun onStartTrackingTouch(s: SeekBar?) {}
-            override fun onStopTrackingTouch(s: SeekBar?) {}
-        })
 
         val cb = CheckBox(this).apply {
             text = "Allumer l'écran à l'appel (test)"
@@ -52,29 +52,10 @@ class MainActivity : Activity() {
                 toast("Autorise puis appuie à nouveau sur Activer")
                 return@setOnClickListener
             }
-            val niveau = bar.progress + 1
-            val seuil = 1.5f - niveau * 0.13f
+            val idx = (rg.checkedRadioButtonId - 1).coerceIn(0, 2)
             prefs.edit()
                 .putString("num", num)
-                .putInt("niveau", niveau)
-                .putFloat("seuil", seuil)
+                .putInt("mode", idx)
+                .putFloat("seuil", choix[idx].second)
                 .putBoolean("ecran", cb.isChecked)
                 .apply()
-            stopService(Intent(this, MotionService::class.java))
-            startForegroundService(Intent(this, MotionService::class.java))
-            toast("Surveillance activée (sensibilité $niveau/10)")
-        }
-        off.setOnClickListener {
-            stopService(Intent(this, MotionService::class.java))
-            toast("Arrêtée")
-        }
-
-        setContentView(LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            setPadding(48, 96, 48, 48)
-            addView(et); addView(label); addView(bar); addView(cb); addView(on); addView(off)
-        })
-    }
-
-    private fun toast(m: String) = Toast.makeText(this, m, Toast.LENGTH_LONG).show()
-}
