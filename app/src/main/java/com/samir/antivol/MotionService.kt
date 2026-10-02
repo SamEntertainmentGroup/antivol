@@ -27,11 +27,11 @@ class MotionService : Service(), SensorEventListener {
 
         private const val NOTIFICATION_ID = 1
 
-        // Temps avant que l'antivol soit armé
+        // Armement après 30 secondes
         private const val ARMEMENT =
             30_000L
 
-        // Temps entre deux appels
+        // Pause entre deux appels
         private const val PAUSE =
             30_000L
     }
@@ -104,7 +104,6 @@ class MotionService : Service(), SensorEventListener {
                 0.8f
             )
 
-        // Armement après 30 secondes
         armedAt =
             System.currentTimeMillis() +
                     ARMEMENT
@@ -145,26 +144,20 @@ class MotionService : Service(), SensorEventListener {
         val now =
             System.currentTimeMillis()
 
-        // Attendre la fin des 30 secondes
+        // Attente des 30 secondes d'armement
         if (now < armedAt) {
             return
         }
 
-        // Cooldown après le dernier appel
+        // Cooldown de 30 secondes
         if (now - lastCall < PAUSE) {
             return
         }
 
-        val x =
-            event.values[0]
+        val x = event.values[0]
+        val y = event.values[1]
+        val z = event.values[2]
 
-        val y =
-            event.values[1]
-
-        val z =
-            event.values[2]
-
-        // Accélération totale
         val magnitude =
             sqrt(
                 x * x +
@@ -172,17 +165,16 @@ class MotionService : Service(), SensorEventListener {
                         z * z
             )
 
-        // Écart par rapport à la gravité
         val movement =
             abs(
                 magnitude - 9.81f
             )
 
         /*
-         * Détection volontairement sensible.
+         * Détection sensible.
          *
-         * Une vibration ou un choc peut donc
-         * déclencher l'alerte.
+         * Un mouvement même léger peut
+         * déclencher l'appel.
          */
         if (movement > seuil) {
 
@@ -253,7 +245,7 @@ class MotionService : Service(), SensorEventListener {
                 )
 
             } catch (_: Exception) {
-                // Impossible de lancer l'appel
+                // Appel impossible
             }
         }
     }
