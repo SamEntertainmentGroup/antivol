@@ -27,13 +27,13 @@ class MotionService : Service(), SensorEventListener {
 
         private const val NOTIFICATION_ID = 1
 
-        // Temps avant armement
+        // Temps avant que l'antivol soit armé
         private const val ARMEMENT =
             30_000L
 
-        // Pause entre deux appels
+        // Temps entre deux appels
         private const val PAUSE =
-            60_000L
+            30_000L
     }
 
     private var seuil = 0.8f
@@ -42,13 +42,14 @@ class MotionService : Service(), SensorEventListener {
 
     private var lastCall = 0L
 
-    private lateinit var sensorManager: SensorManager
+    private lateinit var sensorManager:
+            SensorManager
 
     private var wakeLock:
             PowerManager.WakeLock? = null
 
     // =============================================================
-    // CRÉATION DU SERVICE
+    // CRÉATION
     // =============================================================
 
     override fun onCreate() {
@@ -103,7 +104,7 @@ class MotionService : Service(), SensorEventListener {
                 0.8f
             )
 
-        // Armement dans 30 secondes
+        // Armement après 30 secondes
         armedAt =
             System.currentTimeMillis() +
                     ARMEMENT
@@ -113,7 +114,6 @@ class MotionService : Service(), SensorEventListener {
                 Sensor.TYPE_ACCELEROMETER
             )
 
-        // Pas d'accéléromètre
         if (accelerometer == null) {
 
             stopSelf()
@@ -121,7 +121,6 @@ class MotionService : Service(), SensorEventListener {
             return START_NOT_STICKY
         }
 
-        // Évite plusieurs écouteurs
         sensorManager.unregisterListener(
             this
         )
@@ -136,7 +135,7 @@ class MotionService : Service(), SensorEventListener {
     }
 
     // =============================================================
-    // DÉTECTION DU MOUVEMENT
+    // DÉTECTION
     // =============================================================
 
     override fun onSensorChanged(
@@ -146,12 +145,12 @@ class MotionService : Service(), SensorEventListener {
         val now =
             System.currentTimeMillis()
 
-        // Les 30 secondes d'armement
+        // Attendre la fin des 30 secondes
         if (now < armedAt) {
             return
         }
 
-        // Pause après un appel
+        // Cooldown après le dernier appel
         if (now - lastCall < PAUSE) {
             return
         }
@@ -165,13 +164,7 @@ class MotionService : Service(), SensorEventListener {
         val z =
             event.values[2]
 
-        /*
-         * Calcul de l'accélération totale.
-         *
-         * Lorsque le téléphone est immobile,
-         * la valeur est proche de 9.81 m/s²
-         * à cause de la gravité.
-         */
+        // Accélération totale
         val magnitude =
             sqrt(
                 x * x +
@@ -179,12 +172,18 @@ class MotionService : Service(), SensorEventListener {
                         z * z
             )
 
+        // Écart par rapport à la gravité
         val movement =
             abs(
                 magnitude - 9.81f
             )
 
-        // Mouvement détecté
+        /*
+         * Détection volontairement sensible.
+         *
+         * Une vibration ou un choc peut donc
+         * déclencher l'alerte.
+         */
         if (movement > seuil) {
 
             lastCall = now
@@ -194,7 +193,7 @@ class MotionService : Service(), SensorEventListener {
     }
 
     // =============================================================
-    // APPEL DU NUMÉRO D'ALERTE
+    // APPEL
     // =============================================================
 
     private fun appeler() {
@@ -236,11 +235,6 @@ class MotionService : Service(), SensorEventListener {
             startActivity(intent)
 
         } catch (_: Exception) {
-
-            /*
-             * Deuxième méthode de secours
-             * si ACTION_CALL échoue.
-             */
 
             try {
 
@@ -304,7 +298,7 @@ class MotionService : Service(), SensorEventListener {
                 android.R.drawable.ic_lock_idle_lock
             )
             .setContentTitle(
-                "Antivol actif"
+                "Protection antivol active"
             )
             .setContentText(
                 "Surveillance des mouvements en cours"
@@ -317,7 +311,7 @@ class MotionService : Service(), SensorEventListener {
     }
 
     // =============================================================
-    // AUTRES CALLBACKS
+    // CALLBACKS
     // =============================================================
 
     override fun onAccuracyChanged(
@@ -333,7 +327,7 @@ class MotionService : Service(), SensorEventListener {
     }
 
     // =============================================================
-    // DESTRUCTION
+    // ARRÊT
     // =============================================================
 
     override fun onDestroy() {
