@@ -35,6 +35,11 @@ class MainActivity : Activity() {
             override fun onStopTrackingTouch(s: SeekBar?) {}
         })
 
+        val cb = CheckBox(this).apply {
+            text = "Allumer l'écran à l'appel (test)"
+            isChecked = prefs.getBoolean("ecran", false)
+        }
+
         val on = Button(this).apply { text = "Activer (armé dans 30 s)" }
         val off = Button(this).apply { text = "Arrêter" }
 
@@ -53,6 +58,7 @@ class MainActivity : Activity() {
                 .putString("num", num)
                 .putInt("niveau", niveau)
                 .putFloat("seuil", seuil)
+                .putBoolean("ecran", cb.isChecked)
                 .apply()
             stopService(Intent(this, MotionService::class.java))
             startForegroundService(Intent(this, MotionService::class.java))
@@ -66,7 +72,7 @@ class MainActivity : Activity() {
         setContentView(LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(48, 96, 48, 48)
-            addView(et); addView(label); addView(bar); addView(on); addView(off)
+            addView(et); addView(label); addView(bar); addView(cb); addView(on); addView(off)
         })
     }
 
