@@ -31,10 +31,10 @@ class MotionService : Service(), SensorEventListener {
         private const val ARMEMENT = 30_000L
 
         // Durée de chaque appel avant raccrochage automatique
-        private const val SONNERIE = 8_000L
+        private const val SONNERIE = 20_000L
 
         // Pause entre la fin d'un appel et le suivant
-        private const val ATTENTE = 4_000L
+        private const val ATTENTE = 10_000L
     }
 
     private var seuil = 0.3f
