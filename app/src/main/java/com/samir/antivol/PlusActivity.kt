@@ -64,7 +64,7 @@ class PlusActivity : Activity() {
 
         // PARTAGER
         root.addView(
-            grayButton("Partager l'appli") { share() },
+            grayButton("➦ Partager l'application") { share() },
             LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 dp(56)
