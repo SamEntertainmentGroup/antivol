@@ -12,14 +12,17 @@ import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
 import android.provider.Settings
+import android.text.InputFilter
 import android.text.InputType
 import android.view.Gravity
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import kotlin.math.roundToInt
 
 class MainActivity : Activity() {
 
+    private lateinit var root: LinearLayout
     private lateinit var statusText: TextView
     private lateinit var statusDot: TextView
     private lateinit var phoneInput: EditText
@@ -39,7 +42,7 @@ class MainActivity : Activity() {
         super.onCreate(savedInstanceState)
         val prefs = getSharedPreferences("p", MODE_PRIVATE)
 
-        val root = LinearLayout(this).apply {
+        root = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setBackgroundColor(Color.rgb(247, 248, 250))
             setPadding(dp(20), dp(28), dp(20), dp(20))
@@ -112,6 +115,7 @@ class MainActivity : Activity() {
             textSize = 17f
             inputType = InputType.TYPE_CLASS_PHONE
             setSingleLine(true)
+            filters = arrayOf(InputFilter.LengthFilter(10))
             setPadding(dp(14), dp(12), dp(14), dp(12))
             setText(prefs.getString("num", ""))
             background = roundedBackground(Color.WHITE, Color.rgb(220, 223, 229), 12)
@@ -188,10 +192,11 @@ class MainActivity : Activity() {
 
         // ACTIVER
         activateButton.setOnClickListener {
+            hideKeyboard()
+
             val num = phoneInput.text.toString().trim()
             if (!num.matches(Regex("^\\d{10}$"))) {
                 toast("Numéro invalide (10 chiffres)")
-                phoneInput.requestFocus()
                 return@setOnClickListener
             }
 
@@ -218,6 +223,7 @@ class MainActivity : Activity() {
 
         // ARRÊTER
         stopButton.setOnClickListener {
+            hideKeyboard()
             stopService(Intent(this, MotionService::class.java))
             prefs.edit().putBoolean("active", false).apply()
             updateStatus(false)
@@ -248,6 +254,15 @@ class MainActivity : Activity() {
                 )
             )
         }
+    }
+
+    // CLAVIER
+    private fun hideKeyboard() {
+        (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager)
+            .hideSoftInputFromWindow(phoneInput.windowToken, 0)
+        phoneInput.clearFocus()
+        root.isFocusableInTouchMode = true
+        root.requestFocus()
     }
 
     // ÉTAT DES AUTORISATIONS
