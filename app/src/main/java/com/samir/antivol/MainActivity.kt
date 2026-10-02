@@ -272,6 +272,32 @@ class MainActivity : Activity() {
             }
         )
 
+        val plusButton = Button(this).apply {
+            text = "Plus"
+            isAllCaps = false
+            textSize = 16f
+            setTextColor(Color.rgb(25, 118, 210))
+            background = roundedBackground(
+                Color.WHITE,
+                Color.rgb(25, 118, 210),
+                12
+            )
+            stateListAnimator = null
+            setOnClickListener {
+                startActivity(Intent(this@MainActivity, PlusActivity::class.java))
+            }
+        }
+
+        buttons.addView(
+            plusButton,
+            LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                dp(56)
+            ).apply {
+                topMargin = dp(12)
+            }
+        )
+        
         root.addView(buttons)
 
         updateStatus(prefs.getBoolean("active", false))
