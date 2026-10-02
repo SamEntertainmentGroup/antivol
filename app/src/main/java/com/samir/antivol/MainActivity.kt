@@ -10,6 +10,8 @@ import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.os.PowerManager
 import android.provider.Settings
 import android.text.InputFilter
@@ -23,6 +25,7 @@ import kotlin.math.roundToInt
 class MainActivity : Activity() {
 
     private lateinit var root: LinearLayout
+    private lateinit var banner: TextView
     private lateinit var statusText: TextView
     private lateinit var statusDot: TextView
     private lateinit var phoneInput: EditText
@@ -31,6 +34,9 @@ class MainActivity : Activity() {
     private lateinit var callBtn: Button
     private lateinit var notifBtn: Button
     private lateinit var batBtn: Button
+
+    private val handler = Handler(Looper.getMainLooper())
+    private val hideBanner = Runnable { banner.visibility = View.GONE }
 
     private val choices = listOf(
         "Normal" to 0.8f,
@@ -50,6 +56,17 @@ class MainActivity : Activity() {
         val scroll = ScrollView(this).apply {
             isFillViewport = true
             addView(root)
+        }
+
+        // BANDEAU DE MESSAGE
+        banner = TextView(this).apply {
+            textSize = 16f
+            setTypeface(null, Typeface.BOLD)
+            setTextColor(Color.WHITE)
+            gravity = Gravity.CENTER
+            setPadding(dp(18), dp(16), dp(18), dp(16))
+            elevation = dp(8).toFloat()
+            visibility = View.GONE
         }
 
         // TITRE
@@ -196,13 +213,13 @@ class MainActivity : Activity() {
 
             val num = phoneInput.text.toString().trim()
             if (!num.matches(Regex("^\\d{10}$"))) {
-                toast("Numéro invalide (10 chiffres)")
+                showBanner("Numéro invalide : 10 chiffres requis", false)
                 return@setOnClickListener
             }
 
             if (!allOk()) {
                 refreshConfig()
-                toast("Termine d'abord la configuration en haut")
+                showBanner("Termine d'abord la configuration", false)
                 scroll.smoothScrollTo(0, 0)
                 return@setOnClickListener
             }
@@ -218,7 +235,7 @@ class MainActivity : Activity() {
             stopService(Intent(this, MotionService::class.java))
             startForegroundService(Intent(this, MotionService::class.java))
             updateStatus(true)
-            toast("Protection activée")
+            showBanner("Protection activée", true)
         }
 
         // ARRÊTER
@@ -227,15 +244,37 @@ class MainActivity : Activity() {
             stopService(Intent(this, MotionService::class.java))
             prefs.edit().putBoolean("active", false).apply()
             updateStatus(false)
-            toast("Protection arrêtée")
+            showBanner("Protection arrêtée", true)
         }
 
-        setContentView(scroll)
+        // ÉCRAN = contenu + bandeau par-dessus
+        val frame = FrameLayout(this)
+        frame.addView(
+            scroll,
+            FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT
+            )
+        )
+        frame.addView(
+            banner,
+            FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                Gravity.TOP
+            ).apply { setMargins(dp(16), dp(16), dp(16), 0) }
+        )
+        setContentView(frame)
     }
 
     override fun onResume() {
         super.onResume()
         refreshConfig()
+    }
+
+    override fun onDestroy() {
+        handler.removeCallbacks(hideBanner)
+        super.onDestroy()
     }
 
     override fun onRequestPermissionsResult(
@@ -246,7 +285,7 @@ class MainActivity : Activity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         refreshConfig()
         if (grantResults.isNotEmpty() && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-            toast("Autorise dans les réglages de l'appli")
+            showBanner("Autorise dans les réglages de l'appli", false)
             startActivity(
                 Intent(
                     Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
@@ -254,6 +293,19 @@ class MainActivity : Activity() {
                 )
             )
         }
+    }
+
+    // BANDEAU
+    private fun showBanner(message: String, success: Boolean) {
+        banner.text = message
+        banner.background = roundedBackground(
+            if (success) Color.rgb(25, 145, 80) else Color.rgb(200, 50, 60),
+            Color.TRANSPARENT,
+            14
+        )
+        banner.visibility = View.VISIBLE
+        handler.removeCallbacks(hideBanner)
+        handler.postDelayed(hideBanner, 3000)
     }
 
     // CLAVIER
@@ -387,7 +439,4 @@ class MainActivity : Activity() {
 
     private fun dp(value: Int): Int =
         (value * resources.displayMetrics.density).roundToInt()
-
-    private fun toast(message: String) =
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
 }
