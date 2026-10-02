@@ -26,8 +26,8 @@ class MainActivity : Activity() {
 
     private lateinit var root: LinearLayout
     private lateinit var banner: TextView
+    private lateinit var statusCard: LinearLayout
     private lateinit var statusText: TextView
-    private lateinit var statusDot: TextView
     private lateinit var phoneInput: EditText
     private lateinit var sensitivityGroup: RadioGroup
     private lateinit var configCard: LinearLayout
@@ -78,24 +78,21 @@ class MainActivity : Activity() {
             setPadding(dp(4), dp(4), dp(4), dp(18))
         })
 
-        // STATUT
-        val statusCard = createCard()
-        val statusRow = LinearLayout(this).apply {
-            orientation = LinearLayout.HORIZONTAL
-            gravity = Gravity.CENTER_VERTICAL
-        }
-        statusDot = TextView(this).apply {
-            text = "●"
-            textSize = 21f
-            setPadding(0, 0, dp(12), 0)
-        }
+        // STATUT (carte verte ou rouge)
+        statusCard = createCard()
         statusText = TextView(this).apply {
-            textSize = 17f
+            textSize = 19f
             setTypeface(null, Typeface.BOLD)
+            setTextColor(Color.WHITE)
+            gravity = Gravity.CENTER
         }
-        statusRow.addView(statusDot)
-        statusRow.addView(statusText)
-        statusCard.addView(statusRow)
+        statusCard.addView(
+            statusText,
+            LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+        )
         root.addView(statusCard)
 
         // CONFIGURATION (disparaît quand tout est vert)
@@ -166,32 +163,18 @@ class MainActivity : Activity() {
         sensitivityCard.addView(sensitivityGroup)
         root.addView(sensitivityCard)
 
-        // BOUTONS
+        // BOUTONS NORMAUX
         val buttons = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
             setPadding(dp(4), dp(22), dp(4), dp(20))
         }
         val activateButton = Button(this).apply {
             text = "Activer la protection"
-            textSize = 15f
-            setTypeface(null, Typeface.BOLD)
             isAllCaps = false
-            setTextColor(Color.WHITE)
-            background = roundedBackground(Color.rgb(25, 145, 80), Color.TRANSPARENT, 14)
-            minimumHeight = dp(56)
         }
         val stopButton = Button(this).apply {
             text = "Arrêter la protection"
-            textSize = 15f
-            setTypeface(null, Typeface.BOLD)
             isAllCaps = false
-            setTextColor(Color.rgb(190, 45, 55))
-            background = roundedBackground(
-                Color.rgb(255, 235, 237),
-                Color.rgb(245, 205, 209),
-                14
-            )
-            minimumHeight = dp(54)
         }
         buttons.addView(
             activateButton,
@@ -199,7 +182,7 @@ class MainActivity : Activity() {
         )
         buttons.addView(
             stopButton,
-            LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dp(54))
+            LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, dp(56))
                 .apply { topMargin = dp(12) }
         )
         root.addView(buttons)
@@ -426,15 +409,12 @@ class MainActivity : Activity() {
     }
 
     private fun updateStatus(active: Boolean) {
-        if (active) {
-            statusText.text = "Protection active"
-            statusText.setTextColor(Color.rgb(25, 145, 80))
-            statusDot.setTextColor(Color.rgb(25, 165, 85))
-        } else {
-            statusText.text = "Protection non active"
-            statusText.setTextColor(Color.rgb(90, 94, 102))
-            statusDot.setTextColor(Color.rgb(150, 155, 165))
-        }
+        statusText.text = if (active) "Protection active" else "Protection non active"
+        statusCard.background = roundedBackground(
+            if (active) Color.rgb(25, 145, 80) else Color.rgb(200, 50, 60),
+            Color.TRANSPARENT,
+            16
+        )
     }
 
     private fun dp(value: Int): Int =
