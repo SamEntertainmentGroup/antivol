@@ -226,7 +226,7 @@ class MainActivity : Activity() {
         }
 
         val activateButton = Button(this).apply {
-            text = "Activer la protection"
+            text = "✓ Activer la protection"
             isAllCaps = false
             textSize = 16f
             setTextColor(Color.rgb(35, 38, 45))
@@ -239,7 +239,7 @@ class MainActivity : Activity() {
         }
 
         val stopButton = Button(this).apply {
-            text = "Arrêter la protection"
+            text = "✕ Arrêter la protection"
             isAllCaps = false
             textSize = 16f
             setTextColor(Color.rgb(35, 38, 45))
