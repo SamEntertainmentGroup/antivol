@@ -721,6 +721,16 @@ class MainActivity : Activity() {
                 color,
                 16
             )
+
+        // Sensibilité modifiable uniquement
+        // lorsque la protection est arrêtée
+        for (i in 0 until sensitivityGroup.childCount) {
+            val child = sensitivityGroup.getChildAt(i)
+
+            if (child is RadioButton) {
+                child.isEnabled = !active
+            }
+        }
     }
 
     private fun dp(value: Int): Int =
