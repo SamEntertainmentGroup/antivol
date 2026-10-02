@@ -10,7 +10,6 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.text.InputType
 import android.view.Gravity
-import android.view.View
 import android.widget.*
 import kotlin.math.roundToInt
 
@@ -52,44 +51,47 @@ class MainActivity : Activity() {
 
         val header = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
+
             setPadding(
                 dp(24),
-                dp(28),
+                dp(30),
                 dp(24),
-                dp(24)
+                dp(30)
             )
-            setBackgroundColor(Color.rgb(25, 28, 35))
+
+            setBackgroundColor(
+                Color.rgb(25, 28, 35)
+            )
         }
 
         val appName = TextView(this).apply {
             text = "ANTIVOL"
             textSize = 13f
-            setTextColor(Color.rgb(150, 155, 165))
+            setTextColor(
+                Color.rgb(150, 155, 165)
+            )
             letterSpacing = 0.15f
         }
 
         val title = TextView(this).apply {
             text = "Protection antivol"
-            textSize = 27f
+            textSize = 29f
             setTextColor(Color.WHITE)
-            setTypeface(null, Typeface.BOLD)
+            setTypeface(
+                null,
+                Typeface.BOLD
+            )
+
             setPadding(
                 0,
                 dp(8),
                 0,
-                dp(4)
+                0
             )
-        }
-
-        val subtitle = TextView(this).apply {
-            text = "Protège votre téléphone contre les mouvements suspects."
-            textSize = 14f
-            setTextColor(Color.rgb(190, 194, 202))
         }
 
         header.addView(appName)
         header.addView(title)
-        header.addView(subtitle)
 
         root.addView(header)
 
@@ -106,7 +108,8 @@ class MainActivity : Activity() {
 
         statusDot = TextView(this).apply {
             text = "●"
-            textSize = 22f
+            textSize = 21f
+
             setPadding(
                 0,
                 0,
@@ -115,32 +118,16 @@ class MainActivity : Activity() {
             )
         }
 
-        val statusColumn = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-        }
-
         statusText = TextView(this).apply {
             textSize = 17f
-            setTypeface(null, Typeface.BOLD)
-        }
-
-        val statusDescription = TextView(this).apply {
-            text = "La protection antivol est actuellement désactivée."
-            textSize = 13f
-            setTextColor(Color.rgb(110, 115, 125))
-            setPadding(
-                0,
-                dp(3),
-                0,
-                0
+            setTypeface(
+                null,
+                Typeface.BOLD
             )
         }
 
-        statusColumn.addView(statusText)
-        statusColumn.addView(statusDescription)
-
         statusRow.addView(statusDot)
-        statusRow.addView(statusColumn)
+        statusRow.addView(statusText)
 
         statusCard.addView(statusRow)
 
@@ -151,16 +138,21 @@ class MainActivity : Activity() {
         // =========================================================
 
         root.addView(
-            createSectionTitle("Numéro d'alerte")
+            createSectionTitle(
+                "Numéro d'alerte"
+            )
         )
 
         val phoneCard = createCard()
 
         phoneInput = EditText(this).apply {
-            hint = "0606060606"
-            textSize = 16f
 
-            inputType = InputType.TYPE_CLASS_PHONE
+            hint = "0606060606"
+
+            textSize = 17f
+
+            inputType =
+                InputType.TYPE_CLASS_PHONE
 
             setSingleLine(true)
 
@@ -172,32 +164,21 @@ class MainActivity : Activity() {
             )
 
             setText(
-                prefs.getString("num", "")
+                prefs.getString(
+                    "num",
+                    ""
+                )
             )
 
-            background = roundedBackground(
-                Color.WHITE,
-                Color.rgb(220, 223, 229),
-                12
-            )
+            background =
+                roundedBackground(
+                    Color.WHITE,
+                    Color.rgb(220, 223, 229),
+                    12
+                )
         }
 
         phoneCard.addView(phoneInput)
-
-        val phoneInfo = TextView(this).apply {
-            text = "Le numéro doit contenir exactement 10 chiffres."
-            textSize = 12f
-            setTextColor(Color.rgb(115, 120, 130))
-
-            setPadding(
-                dp(2),
-                dp(8),
-                dp(2),
-                0
-            )
-        }
-
-        phoneCard.addView(phoneInfo)
 
         root.addView(phoneCard)
 
@@ -206,53 +187,72 @@ class MainActivity : Activity() {
         // =========================================================
 
         root.addView(
-            createSectionTitle("Sensibilité")
+            createSectionTitle(
+                "Sensibilité"
+            )
         )
 
         val sensitivityCard = createCard()
 
-        sensitivityGroup = RadioGroup(this).apply {
-            orientation = RadioGroup.VERTICAL
-        }
+        sensitivityGroup =
+            RadioGroup(this).apply {
+                orientation =
+                    RadioGroup.VERTICAL
+            }
 
         val currentMode =
-            prefs.getInt("mode", 0)
-                .coerceIn(0, 2)
+            prefs.getInt(
+                "mode",
+                0
+            ).coerceIn(0, 2)
 
         choices.forEachIndexed { index, choice ->
 
-            val radio = RadioButton(this).apply {
+            val radio =
+                RadioButton(this).apply {
 
-                id = 100 + index
+                    id = 100 + index
 
-                text = choice.first
+                    text = choice.first
 
-                textSize = 16f
+                    textSize = 16f
 
-                setTextColor(
-                    Color.rgb(35, 38, 45)
-                )
+                    setTextColor(
+                        Color.rgb(
+                            35,
+                            38,
+                            45
+                        )
+                    )
 
-                setPadding(
-                    dp(4),
-                    dp(10),
-                    0,
-                    dp(10)
-                )
+                    setPadding(
+                        dp(4),
+                        dp(10),
+                        0,
+                        dp(10)
+                    )
 
-                isChecked =
-                    index == currentMode
-            }
+                    isChecked =
+                        index == currentMode
+                }
 
-            sensitivityGroup.addView(radio)
+            sensitivityGroup.addView(
+                radio
+            )
 
             if (index < choices.lastIndex) {
 
-                val separator = View(this).apply {
-                    setBackgroundColor(
-                        Color.rgb(235, 236, 240)
-                    )
-                }
+                val separator =
+                    android.view.View(this).apply {
+
+                        setBackgroundColor(
+                            Color.rgb(
+                                235,
+                                236,
+                                240
+                            )
+                        )
+                    }
 
                 sensitivityGroup.addView(
                     separator,
@@ -268,67 +268,111 @@ class MainActivity : Activity() {
             sensitivityGroup
         )
 
-        root.addView(sensitivityCard)
+        root.addView(
+            sensitivityCard
+        )
 
         // =========================================================
         // BOUTONS
         // =========================================================
 
-        val buttons = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
+        val buttons =
+            LinearLayout(this).apply {
 
-            setPadding(
-                dp(24),
-                dp(22),
-                dp(24),
-                dp(30)
-            )
-        }
+                orientation =
+                    LinearLayout.VERTICAL
 
-        val activateButton = Button(this).apply {
+                setPadding(
+                    dp(24),
+                    dp(22),
+                    dp(24),
+                    dp(30)
+                )
+            }
 
-            text = "ACTIVER LA PROTECTION"
+        // ---------------------------------------------------------
+        // ACTIVER
+        // ---------------------------------------------------------
 
-            textSize = 14f
+        val activateButton =
+            Button(this).apply {
 
-            setTypeface(
-                null,
-                Typeface.BOLD
-            )
+                text =
+                    "Activer la protection"
 
-            isAllCaps = false
+                textSize = 15f
 
-            setTextColor(Color.WHITE)
+                setTypeface(
+                    null,
+                    Typeface.BOLD
+                )
 
-            background = roundedBackground(
-                Color.rgb(28, 125, 76),
-                Color.TRANSPARENT,
-                14
-            )
+                isAllCaps = false
 
-            minimumHeight = dp(54)
-        }
+                setTextColor(
+                    Color.WHITE
+                )
 
-        val stopButton = Button(this).apply {
+                background =
+                    roundedBackground(
+                        Color.rgb(
+                            28,
+                            125,
+                            76
+                        ),
+                        Color.TRANSPARENT,
+                        14
+                    )
 
-            text = "Arrêter la protection"
+                minimumHeight =
+                    dp(56)
+            }
 
-            textSize = 14f
+        // ---------------------------------------------------------
+        // ARRÊTER
+        // ---------------------------------------------------------
 
-            isAllCaps = false
+        val stopButton =
+            Button(this).apply {
 
-            setTextColor(
-                Color.rgb(190, 55, 55)
-            )
+                text =
+                    "Arrêter la protection"
 
-            background = roundedBackground(
-                Color.rgb(255, 242, 242),
-                Color.TRANSPARENT,
-                14
-            )
+                textSize = 15f
 
-            minimumHeight = dp(50)
-        }
+                setTypeface(
+                    null,
+                    Typeface.BOLD
+                )
+
+                isAllCaps = false
+
+                setTextColor(
+                    Color.rgb(
+                        190,
+                        45,
+                        55
+                    )
+                )
+
+                background =
+                    roundedBackground(
+                        Color.rgb(
+                            255,
+                            232,
+                            234
+                        ),
+                        Color.rgb(
+                            245,
+                            205,
+                            209
+                        ),
+                        14
+                    )
+
+                minimumHeight =
+                    dp(54)
+            }
 
         buttons.addView(
             activateButton,
@@ -342,24 +386,29 @@ class MainActivity : Activity() {
             stopButton,
             LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
-                dp(52)
+                dp(54)
             ).apply {
-                topMargin = dp(10)
+                topMargin = dp(12)
             }
         )
 
-        root.addView(buttons)
-
-        // =========================================================
-        // ÉTAT INITIAL
-        // =========================================================
-
-        updateStatus(
-            prefs.getBoolean("active", false)
+        root.addView(
+            buttons
         )
 
         // =========================================================
-        // ACTIVER
+        // STATUT INITIAL
+        // =========================================================
+
+        updateStatus(
+            prefs.getBoolean(
+                "active",
+                false
+            )
+        )
+
+        // =========================================================
+        // ACTIVATION
         // =========================================================
 
         activateButton.setOnClickListener {
@@ -370,13 +419,14 @@ class MainActivity : Activity() {
                     .trim()
 
             // Exactement 10 chiffres
-            if (!num.matches(
+            if (
+                !num.matches(
                     Regex("^\\d{10}$")
                 )
             ) {
 
                 toast(
-                    "Le numéro doit contenir exactement 10 chiffres"
+                    "Numéro invalide"
                 )
 
                 phoneInput.requestFocus()
@@ -400,34 +450,48 @@ class MainActivity : Activity() {
                 )
 
                 toast(
-                    "Autorise les permissions puis appuie à nouveau sur Activer"
+                    "Autorise les permissions puis appuie à nouveau"
                 )
 
                 return@setOnClickListener
             }
 
             val selectedId =
-                sensitivityGroup.checkedRadioButtonId
+                sensitivityGroup
+                    .checkedRadioButtonId
 
-            val index = when (selectedId) {
-                100 -> 0
-                101 -> 1
-                102 -> 2
-                else -> 0
-            }
+            val index =
+                when (selectedId) {
+                    100 -> 0
+                    101 -> 1
+                    102 -> 2
+                    else -> 0
+                }
 
             val selected =
                 choices[index]
 
             // Sauvegarde
             prefs.edit()
-                .putString("num", num)
-                .putInt("mode", index)
-                .putFloat("seuil", selected.second)
-                .putBoolean("active", true)
+                .putString(
+                    "num",
+                    num
+                )
+                .putInt(
+                    "mode",
+                    index
+                )
+                .putFloat(
+                    "seuil",
+                    selected.second
+                )
+                .putBoolean(
+                    "active",
+                    true
+                )
                 .apply()
 
-            // Évite plusieurs services
+            // Arrête une éventuelle ancienne instance
             stopService(
                 Intent(
                     this,
@@ -435,7 +499,7 @@ class MainActivity : Activity() {
                 )
             )
 
-            // Lance la surveillance
+            // Démarre l'antivol
             startForegroundService(
                 Intent(
                     this,
@@ -446,12 +510,12 @@ class MainActivity : Activity() {
             updateStatus(true)
 
             toast(
-                "Protection activée — armement dans 30 secondes"
+                "Protection activée"
             )
         }
 
         // =========================================================
-        // ARRÊTER
+        // ARRÊT
         // =========================================================
 
         stopButton.setOnClickListener {
@@ -464,13 +528,16 @@ class MainActivity : Activity() {
             )
 
             prefs.edit()
-                .putBoolean("active", false)
+                .putBoolean(
+                    "active",
+                    false
+                )
                 .apply()
 
             updateStatus(false)
 
             toast(
-                "Protection antivol arrêtée"
+                "Protection arrêtée"
             )
         }
 
@@ -478,10 +545,11 @@ class MainActivity : Activity() {
     }
 
     // =============================================================
-    // CRÉATION D'UNE CARTE
+    // CARTE
     // =============================================================
 
-    private fun createCard(): LinearLayout {
+    private fun createCard():
+            LinearLayout {
 
         return LinearLayout(this).apply {
 
@@ -498,29 +566,32 @@ class MainActivity : Activity() {
             background =
                 roundedBackground(
                     Color.WHITE,
-                    Color.rgb(232, 234, 238),
+                    Color.rgb(
+                        232,
+                        234,
+                        238
+                    ),
                     16
                 )
 
-            val params =
+            layoutParams =
                 LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
-                )
+                ).apply {
 
-            params.setMargins(
-                dp(20),
-                dp(8),
-                dp(20),
-                dp(8)
-            )
-
-            layoutParams = params
+                    setMargins(
+                        dp(20),
+                        dp(8),
+                        dp(20),
+                        dp(8)
+                    )
+                }
         }
     }
 
     // =============================================================
-    // TITRE DE SECTION
+    // TITRE SECTION
     // =============================================================
 
     private fun createSectionTitle(
@@ -539,7 +610,11 @@ class MainActivity : Activity() {
             )
 
             setTextColor(
-                Color.rgb(90, 95, 105)
+                Color.rgb(
+                    90,
+                    95,
+                    105
+                )
             )
 
             setPadding(
@@ -552,7 +627,7 @@ class MainActivity : Activity() {
     }
 
     // =============================================================
-    // BACKGROUND ARRONDI
+    // BACKGROUND
     // =============================================================
 
     private fun roundedBackground(
@@ -595,24 +670,40 @@ class MainActivity : Activity() {
                 "Protection active"
 
             statusText.setTextColor(
-                Color.rgb(28, 125, 76)
+                Color.rgb(
+                    28,
+                    150,
+                    85
+                )
             )
 
             statusDot.setTextColor(
-                Color.rgb(28, 160, 90)
+                Color.rgb(
+                    28,
+                    170,
+                    90
+                )
             )
 
         } else {
 
             statusText.text =
-                "Protection inactive"
+                "Protection non active"
 
             statusText.setTextColor(
-                Color.rgb(80, 84, 92)
+                Color.rgb(
+                    90,
+                    94,
+                    102
+                )
             )
 
             statusDot.setTextColor(
-                Color.rgb(150, 155, 165)
+                Color.rgb(
+                    150,
+                    155,
+                    165
+                )
             )
         }
     }
@@ -632,7 +723,7 @@ class MainActivity : Activity() {
     }
 
     // =============================================================
-    // TOAST
+    // MESSAGE
     // =============================================================
 
     private fun toast(
@@ -646,4 +737,3 @@ class MainActivity : Activity() {
         ).show()
     }
 }
- 
