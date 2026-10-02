@@ -231,7 +231,7 @@ class MainActivity : Activity() {
             textSize = 16f
             setTextColor(Color.rgb(35, 38, 45))
             background = roundedBackground(
-                Color.WHITE,
+                Color.rgb(242, 243, 245),
                 Color.rgb(220, 223, 229),
                 12
             )
@@ -244,7 +244,7 @@ class MainActivity : Activity() {
             textSize = 16f
             setTextColor(Color.rgb(35, 38, 45))
             background = roundedBackground(
-                Color.WHITE,
+                Color.rgb(242, 243, 245),
                 Color.rgb(220, 223, 229),
                 12
             )
