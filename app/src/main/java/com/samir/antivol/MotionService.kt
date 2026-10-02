@@ -11,332 +11,166 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.os.PowerManager
 import android.telecom.TelecomManager
 import kotlin.math.abs
-import kotlin.math.sqrt
+import kotlin.math.max
 
 class MotionService : Service(), SensorEventListener {
 
     companion object {
-
-        private const val CHANNEL_ID =
-            "antivol_channel"
-
+        private const val CHANNEL_ID = "antivol_channel"
         private const val NOTIFICATION_ID = 1
 
         // Armement après 30 secondes
-        private const val ARMEMENT =
-            30_000L
+        private const val ARMEMENT = 30_000L
 
-        // Pause entre deux appels
-        private const val PAUSE =
-            60_000L
+        // Durée de chaque appel avant raccrochage automatique
+        private const val SONNERIE = 8_000L
+
+        // Pause entre la fin d'un appel et le suivant
+        private const val ATTENTE = 4_000L
     }
 
-    private var seuil = 0.8f
-
+    private var seuil = 0.3f
     private var armedAt = 0L
+    private var nextCallAt = 0L
 
-    private var lastCall = 0L
+    private var hasLast = false
+    private var lx = 0f
+    private var ly = 0f
+    private var lz = 0f
 
-    private lateinit var sensorManager:
-            SensorManager
-
-    private var wakeLock:
-            PowerManager.WakeLock? = null
-
-    // =============================================================
-    // CRÉATION
-    // =============================================================
+    private val handler = Handler(Looper.getMainLooper())
+    private lateinit var sensorManager: SensorManager
+    private var wakeLock: PowerManager.WakeLock? = null
 
     override fun onCreate() {
-
         super.onCreate()
 
-        sensorManager =
-            getSystemService(
-                Context.SENSOR_SERVICE
-            ) as SensorManager
-
+        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         createNotificationChannel()
 
-        val powerManager =
-            getSystemService(
-                Context.POWER_SERVICE
-            ) as PowerManager
-
-        wakeLock =
-            powerManager.newWakeLock(
-                PowerManager.PARTIAL_WAKE_LOCK,
-                "antivol:motion"
-            )
-
+        val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
+        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "antivol:motion")
         wakeLock?.acquire()
     }
 
-    // =============================================================
-    // DÉMARRAGE
-    // =============================================================
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        startForeground(NOTIFICATION_ID, createNotification())
 
-    override fun onStartCommand(
-        intent: Intent?,
-        flags: Int,
-        startId: Int
-    ): Int {
+        seuil = getSharedPreferences("p", MODE_PRIVATE).getFloat("seuil", 0.3f)
 
-        startForeground(
-            NOTIFICATION_ID,
-            createNotification()
-        )
+        val now = System.currentTimeMillis()
+        armedAt = now + ARMEMENT
+        nextCallAt = 0L
+        hasLast = false
 
-        val prefs =
-            getSharedPreferences(
-                "p",
-                MODE_PRIVATE
-            )
-
-        seuil =
-            prefs.getFloat(
-                "seuil",
-                0.8f
-            )
-
-        armedAt =
-            System.currentTimeMillis() +
-                    ARMEMENT
-
-        val accelerometer =
-            sensorManager.getDefaultSensor(
-                Sensor.TYPE_ACCELEROMETER
-            )
-
+        val accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
         if (accelerometer == null) {
-
             stopSelf()
-
             return START_NOT_STICKY
         }
 
-        sensorManager.unregisterListener(
-            this
-        )
-
-        sensorManager.registerListener(
-            this,
-            accelerometer,
-            SensorManager.SENSOR_DELAY_UI
-        )
+        sensorManager.unregisterListener(this)
+        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME)
 
         return START_STICKY
     }
 
-    // =============================================================
-    // DÉTECTION
-    // =============================================================
-
-    override fun onSensorChanged(
-        event: SensorEvent
-    ) {
-
-        val now =
-            System.currentTimeMillis()
-
-        // Attente des 30 secondes d'armement
-        if (now < armedAt) {
-            return
-        }
-
-        // Cooldown de 30 secondes
-        if (now - lastCall < PAUSE) {
-            return
-        }
-
+    // DÉTECTION : variation entre deux mesures, quelle que soit la position
+    override fun onSensorChanged(event: SensorEvent) {
         val x = event.values[0]
         val y = event.values[1]
         val z = event.values[2]
 
-        val magnitude =
-            sqrt(
-                x * x +
-                        y * y +
-                        z * z
-            )
+        if (!hasLast) {
+            lx = x; ly = y; lz = z
+            hasLast = true
+            return
+        }
 
-        val movement =
-            abs(
-                magnitude - 9.81f
-            )
+        val delta = max(abs(x - lx), max(abs(y - ly), abs(z - lz)))
+        lx = x; ly = y; lz = z
 
-        /*
-         * Détection sensible.
-         *
-         * Un mouvement même léger peut
-         * déclencher l'appel.
-         */
-        if (movement > seuil) {
+        val now = System.currentTimeMillis()
+        if (now < armedAt || now < nextCallAt) return
 
-            lastCall = now
-
+        if (delta > seuil) {
+            nextCallAt = now + SONNERIE + ATTENTE
             appeler()
         }
     }
 
-    // =============================================================
     // APPEL
-    // =============================================================
-
     private fun appeler() {
-
-        val prefs =
-            getSharedPreferences(
-                "p",
-                MODE_PRIVATE
-            )
-
-        val num =
-            prefs.getString(
-                "num",
-                ""
-            ) ?: ""
-
-        if (num.isEmpty()) {
-            return
-        }
-
-        val uri =
-            Uri.parse(
-                "tel:$num"
-            )
+        val num = getSharedPreferences("p", MODE_PRIVATE).getString("num", "") ?: ""
+        if (num.isEmpty()) return
 
         try {
-
-            val intent =
-                Intent(
-                    Intent.ACTION_CALL,
-                    uri
-                ).apply {
-
-                    addFlags(
-                        Intent.FLAG_ACTIVITY_NEW_TASK
-                    )
-                }
-
-            startActivity(intent)
-
+            val telecom = getSystemService(Context.TELECOM_SERVICE) as TelecomManager
+            telecom.placeCall(Uri.fromParts("tel", num, null), Bundle())
         } catch (_: Exception) {
-
             try {
-
-                val telecom =
-                    getSystemService(
-                        Context.TELECOM_SERVICE
-                    ) as TelecomManager
-
-                telecom.placeCall(
-                    Uri.fromParts(
-                        "tel",
-                        num,
-                        null
-                    ),
-                    Bundle()
+                startActivity(
+                    Intent(Intent.ACTION_CALL, Uri.parse("tel:$num"))
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 )
-
             } catch (_: Exception) {
-                // Appel impossible
+            }
+        }
+
+        handler.postDelayed({ raccrocher() }, SONNERIE)
+    }
+
+    @Suppress("DEPRECATION")
+    private fun raccrocher() {
+        if (Build.VERSION.SDK_INT >= 28) {
+            try {
+                (getSystemService(Context.TELECOM_SERVICE) as TelecomManager).endCall()
+            } catch (_: Exception) {
             }
         }
     }
 
-    // =============================================================
     // NOTIFICATION
-    // =============================================================
-
     private fun createNotificationChannel() {
-
-        val manager =
-            getSystemService(
-                NotificationManager::class.java
-            )
-
-        val channel =
-            NotificationChannel(
-                CHANNEL_ID,
-                "Protection antivol",
-                NotificationManager.IMPORTANCE_LOW
-            ).apply {
-
-                description =
-                    "Surveillance antivol active"
-
-                setShowBadge(false)
-            }
-
-        manager.createNotificationChannel(
-            channel
-        )
+        val manager = getSystemService(NotificationManager::class.java)
+        val channel = NotificationChannel(
+            CHANNEL_ID,
+            "Protection antivol",
+            NotificationManager.IMPORTANCE_LOW
+        ).apply {
+            description = "Surveillance antivol active"
+            setShowBadge(false)
+        }
+        manager.createNotificationChannel(channel)
     }
 
-    private fun createNotification():
-            Notification {
-
-        return Notification.Builder(
-            this,
-            CHANNEL_ID
-        )
-            .setSmallIcon(
-                android.R.drawable.ic_lock_idle_lock
-            )
-            .setContentTitle(
-                "Protection antivol active"
-            )
-            .setContentText(
-                "Surveillance des mouvements en cours"
-            )
+    private fun createNotification(): Notification {
+        return Notification.Builder(this, CHANNEL_ID)
+            .setSmallIcon(android.R.drawable.ic_lock_idle_lock)
+            .setContentTitle("Protection antivol active")
+            .setContentText("Surveillance des mouvements en cours")
             .setOngoing(true)
-            .setCategory(
-                Notification.CATEGORY_SERVICE
-            )
+            .setCategory(Notification.CATEGORY_SERVICE)
             .build()
     }
 
-    // =============================================================
-    // CALLBACKS
-    // =============================================================
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
 
-    override fun onAccuracyChanged(
-        sensor: Sensor?,
-        accuracy: Int
-    ) {
-    }
-
-    override fun onBind(
-        intent: Intent?
-    ): IBinder? {
-        return null
-    }
-
-    // =============================================================
-    // ARRÊT
-    // =============================================================
+    override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onDestroy() {
-
-        sensorManager.unregisterListener(
-            this
-        )
-
-        wakeLock?.let {
-
-            if (it.isHeld) {
-                it.release()
-            }
-        }
-
+        handler.removeCallbacksAndMessages(null)
+        sensorManager.unregisterListener(this)
+        wakeLock?.let { if (it.isHeld) it.release() }
         wakeLock = null
-
         super.onDestroy()
     }
 }
