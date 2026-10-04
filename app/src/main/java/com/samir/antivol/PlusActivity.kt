@@ -15,7 +15,7 @@ import kotlin.math.roundToInt
 class PlusActivity : Activity() {
 
     // Remplace par ton numéro WhatsApp : indicatif sans + ni 0 devant (ex : 213680912224)
-    private val SUPPORT_WHATSAPP = "213555123456"
+    private val SUPPORT_WHATSAPP = "213666912226"
 
     private val NOIR = Color.rgb(35, 38, 45)
 
