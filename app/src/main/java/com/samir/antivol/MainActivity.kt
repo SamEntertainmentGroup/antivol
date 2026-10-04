@@ -734,9 +734,9 @@ class MainActivity : Activity() {
         statusCard.background =
             roundedBackground(
                 if (active) {
-                    Color.rgb(230, 245, 236)
+                    Color.rgb(205, 235, 215)
                 } else {
-                    Color.rgb(250, 232, 234)
+                    Color.rgb(245, 205, 210)
                 },
                 color,
                 16
