@@ -363,7 +363,7 @@ class MainActivity : Activity() {
 
             showBanner(
                 "Protection arrêtée",
-                true
+                false
             )
         }
 
