@@ -38,11 +38,12 @@ class MainActivity : Activity() {
     private val handler = Handler(Looper.getMainLooper())
     private val hideBanner = Runnable { banner.visibility = View.GONE }
 
-    private val choices = listOf(
-        "Normal" to 0.30f,
-        "Sensible" to 0.10f,
-        "Extrême" to 0.03f
+    private val choiceNames = listOf(
+        R.string.sens_normal,
+        R.string.sens_sensible,
+        R.string.sens_extreme
     )
+    private val choiceValues = listOf(0.30f, 0.10f, 0.03f)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,7 +71,7 @@ class MainActivity : Activity() {
             elevation = dp(8).toFloat()
             visibility = View.GONE
         }
-        
+
         // STATUT
         statusCard = createCard().apply {
             orientation = LinearLayout.HORIZONTAL
@@ -81,7 +82,7 @@ class MainActivity : Activity() {
         val statusDot = TextView(this).apply {
             text = "●"
             textSize = 18f
-            setPadding(0, 0, dp(10), 0)
+            setPaddingRelative(0, 0, dp(10), 0)
         }
 
         statusText = TextView(this).apply {
@@ -118,38 +119,38 @@ class MainActivity : Activity() {
         }
 
         configCard.addView(TextView(this).apply {
-            text = "⚠ Configuration requise"
+            text = getString(R.string.config_title)
             textSize = 16f
             setTypeface(null, Typeface.BOLD)
             setTextColor(Color.rgb(160, 90, 0))
             setPadding(0, 0, 0, dp(6))
         })
 
-        callBtn = addRow(configCard, "Autorisation d'appel") {
+        callBtn = addRow(configCard, getString(R.string.perm_call)) {
             requestPermissions(
                 arrayOf(
-                Manifest.permission.CALL_PHONE,
-                Manifest.permission.ANSWER_PHONE_CALLS
-            ),
-             1
+                    Manifest.permission.CALL_PHONE,
+                    Manifest.permission.ANSWER_PHONE_CALLS
+                ),
+                1
             )
         }
 
-        notifBtn = addRow(configCard, "Autorisation de notification") {
+        notifBtn = addRow(configCard, getString(R.string.perm_notif)) {
             requestPermissions(
                 arrayOf(Manifest.permission.POST_NOTIFICATIONS),
                 2
             )
         }
 
-        batBtn = addRow(configCard, "Batterie sans restriction") {
+        batBtn = addRow(configCard, getString(R.string.perm_battery)) {
             askBattery()
         }
 
         root.addView(configCard)
 
         // NUMÉRO
-        root.addView(createSectionTitle("Numéro à appeler en cas d’alerte"))
+        root.addView(createSectionTitle(getString(R.string.section_number)))
 
         val phoneCard = createCard()
 
@@ -172,7 +173,7 @@ class MainActivity : Activity() {
         root.addView(phoneCard)
 
         // SENSIBILITÉ
-        root.addView(createSectionTitle("Sensibilité"))
+        root.addView(createSectionTitle(getString(R.string.section_sensitivity)))
 
         val sensitivityCard = createCard()
 
@@ -184,20 +185,20 @@ class MainActivity : Activity() {
             .getInt("mode", 0)
             .coerceIn(0, 2)
 
-        choices.forEachIndexed { index, choice ->
+        choiceNames.forEachIndexed { index, nameRes ->
 
             sensitivityGroup.addView(
                 RadioButton(this).apply {
                     id = 100 + index
-                    text = choice.first
+                    text = getString(nameRes)
                     textSize = 16f
                     setTextColor(Color.rgb(35, 38, 45))
-                    setPadding(dp(4), dp(10), 0, dp(10))
+                    setPaddingRelative(dp(4), dp(10), 0, dp(10))
                     isChecked = index == currentMode
                 }
             )
 
-            if (index < choices.lastIndex) {
+            if (index < choiceNames.lastIndex) {
                 sensitivityGroup.addView(
                     View(this).apply {
                         setBackgroundColor(Color.rgb(235, 236, 240))
@@ -220,7 +221,7 @@ class MainActivity : Activity() {
         }
 
         val activateButton = Button(this).apply {
-            text = "🟢 Activer la protection"
+            text = getString(R.string.btn_activate)
             isAllCaps = false
             textSize = 16f
             setTextColor(Color.rgb(35, 38, 45))
@@ -233,7 +234,7 @@ class MainActivity : Activity() {
         }
 
         val stopButton = Button(this).apply {
-            text = "🔴 Arrêter la protection"
+            text = getString(R.string.btn_stop)
             isAllCaps = false
             textSize = 16f
             setTextColor(Color.rgb(35, 38, 45))
@@ -264,7 +265,7 @@ class MainActivity : Activity() {
         )
 
         val plusButton = Button(this).apply {
-            text = "Plus"
+            text = getString(R.string.btn_plus)
             isAllCaps = false
             textSize = 16f
             setTextColor(Color.rgb(35, 38, 45))
@@ -288,7 +289,7 @@ class MainActivity : Activity() {
                 topMargin = dp(30)
             }
         )
-        
+
         root.addView(buttons)
 
         updateStatus(prefs.getBoolean("active", false))
@@ -302,19 +303,13 @@ class MainActivity : Activity() {
             val num = phoneInput.text.toString().trim()
 
             if (!num.matches(Regex("^\\d{10}$"))) {
-                showBanner(
-                    "Numéro invalide : 10 chiffres requis",
-                    false
-                )
+                showBanner(getString(R.string.msg_invalid_number), false)
                 return@setOnClickListener
             }
 
             if (!allOk()) {
                 refreshConfig()
-                showBanner(
-                    "Termine d'abord la configuration",
-                    false
-                )
+                showBanner(getString(R.string.msg_finish_config), false)
                 scroll.smoothScrollTo(0, 0)
                 return@setOnClickListener
             }
@@ -326,7 +321,7 @@ class MainActivity : Activity() {
             prefs.edit()
                 .putString("num", num)
                 .putInt("mode", index)
-                .putFloat("seuil", choices[index].second)
+                .putFloat("seuil", choiceValues[index])
                 .putBoolean("active", true)
                 .apply()
 
@@ -340,10 +335,7 @@ class MainActivity : Activity() {
 
             updateStatus(true)
 
-            showBanner(
-                "Protection activée",
-                true
-            )
+            showBanner(getString(R.string.msg_activated), true)
         }
 
         // ARRÊTER
@@ -361,10 +353,7 @@ class MainActivity : Activity() {
 
             updateStatus(false)
 
-            showBanner(
-                "Protection arrêtée",
-                false
-            )
+            showBanner(getString(R.string.msg_stopped), false)
         }
 
         // ÉCRAN = contenu + bandeau par-dessus
@@ -424,10 +413,7 @@ class MainActivity : Activity() {
             grantResults.isNotEmpty() &&
             grantResults[0] != PackageManager.PERMISSION_GRANTED
         ) {
-            showBanner(
-                "Autorise dans les réglages de l'appli",
-                false
-            )
+            showBanner(getString(R.string.msg_allow_settings), false)
 
             startActivity(
                 Intent(
@@ -603,9 +589,9 @@ class MainActivity : Activity() {
         btn.isEnabled = !ok
 
         btn.text = if (ok) {
-            "✓ OK"
+            getString(R.string.btn_ok)
         } else {
-            "Autoriser"
+            getString(R.string.btn_authorize)
         }
 
         btn.setTextColor(Color.WHITE)
@@ -719,9 +705,9 @@ class MainActivity : Activity() {
 
         statusText.text =
             if (active) {
-                "Protection active"
+                getString(R.string.status_active)
             } else {
-                "Protection non active"
+                getString(R.string.status_inactive)
             }
 
         statusText.setTextColor(color)
