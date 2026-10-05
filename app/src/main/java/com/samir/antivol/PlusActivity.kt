@@ -14,7 +14,7 @@ import kotlin.math.roundToInt
 
 class PlusActivity : Activity() {
 
-    // Remplace par ton numéro WhatsApp : indicatif sans + ni 0 devant (ex : 213680912224)
+    // Numéro WhatsApp du support : indicatif sans + ni 0 devant
     private val SUPPORT_WHATSAPP = "213666912226"
 
     private val NOIR = Color.rgb(35, 38, 45)
@@ -33,15 +33,15 @@ class PlusActivity : Activity() {
         }
 
         // COMMENT ÇA MARCHE
-        root.addView(sectionTitle("Comment ça marche"))
+        root.addView(sectionTitle(getString(R.string.how_title)))
         val howCard = card()
         howCard.addView(TextView(this).apply {
             text = Html.fromHtml(
-                "<b>1. Prépare le téléphone.</b> Laisse dans la voiture un téléphone avec une puce ayant au moins une unité de crédit, pour qu'il puisse appeler. Pas besoin d'internet." +
+                "<b>${getString(R.string.how_1_title)}</b> ${getString(R.string.how_1_body)}" +
                     "<br><br>" +
-                    "<b>2. Active la protection.</b> Entre ton numéro personnel (ou ton deuxième mobile), choisis la sensibilité, puis appuie sur « Activer la protection »." +
+                    "<b>${getString(R.string.how_2_title)}</b> ${getString(R.string.how_2_body)}" +
                     "<br><br>" +
-                    "<b>3. Reçois l'alerte.</b> Si la voiture bouge, le téléphone t'appelle. Ne décroche pas : rejette l'appel et va voir ta voiture.",
+                    "<b>${getString(R.string.how_3_title)}</b> ${getString(R.string.how_3_body)}",
                 Html.FROM_HTML_MODE_LEGACY
             )
             textSize = 15f
@@ -52,7 +52,7 @@ class PlusActivity : Activity() {
 
         // CONTACTER LE SUPPORT
         root.addView(
-            grayButton("Contacter le support") { openSupport() },
+            grayButton(getString(R.string.btn_support)) { openSupport() },
             LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 dp(56)
@@ -61,7 +61,7 @@ class PlusActivity : Activity() {
 
         // PARTAGER
         root.addView(
-            grayButton("🔗 Partager l'application") { share() },
+            grayButton(getString(R.string.btn_share)) { share() },
             LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 dp(56)
@@ -70,7 +70,7 @@ class PlusActivity : Activity() {
 
         // VÉRIFIER LES MISES À JOUR
         root.addView(
-            grayButton("🔄 Vérifier les mises à jour") { checkUpdate() },
+            grayButton(getString(R.string.btn_update)) { checkUpdate() },
             LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 dp(56)
@@ -79,7 +79,7 @@ class PlusActivity : Activity() {
 
         // RETOUR
         root.addView(
-            backButton("Retour à l'accueil") { finish() },
+            backButton(getString(R.string.btn_back)) { finish() },
             LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 dp(56)
@@ -91,11 +91,12 @@ class PlusActivity : Activity() {
 
     // ACTIONS
     private fun openSupport() {
-        val msg = "Bonjour, j'ai besoin d'aide avec l'application Antivol.\n\n" +
-            "Téléphone : ${Build.MANUFACTURER} ${Build.MODEL}\n" +
-            "Android : ${Build.VERSION.RELEASE}\n" +
-            "Version de l'application : ${versionName()}\n\n" +
-            "Mon problème : "
+        val msg = getString(
+            R.string.support_msg,
+            "${Build.MANUFACTURER} ${Build.MODEL}",
+            Build.VERSION.RELEASE,
+            versionName()
+        ) + " "
         val uri = Uri.parse("https://wa.me/$SUPPORT_WHATSAPP?text=${Uri.encode(msg)}")
         try {
             startActivity(Intent(Intent.ACTION_VIEW, uri))
@@ -108,11 +109,11 @@ class PlusActivity : Activity() {
             type = "text/plain"
             putExtra(
                 Intent.EXTRA_TEXT,
-                "Antivol : une application qui appelle ton téléphone si ta voiture bouge pendant la nuit.\n\n" +
+                getString(R.string.share_text) + "\n\n" +
                     "https://play.google.com/store/apps/details?id=$packageName"
             )
         }
-        startActivity(Intent.createChooser(intent, "Partager l'application"))
+        startActivity(Intent.createChooser(intent, getString(R.string.share_chooser)))
     }
 
     private fun checkUpdate() {
