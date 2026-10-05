@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Antivol</string>
+
+    <string name="status_active">Protection active</string>
+    <string name="status_inactive">Protection non active</string>
+    <string name="config_title">⚠ Configuration requise</string>
+    <string name="perm_call">Autorisation d’appel</string>
+    <string name="perm_notif">Autorisation de notification</string>
+    <string name="perm_battery">Batterie sans restriction</string>
+    <string name="btn_authorize">Autoriser</string>
+    <string name="btn_ok">✓ OK</string>
+    <string name="section_number">Numéro à appeler en cas d’alerte</string>
+    <string name="section_sensitivity">Sensibilité</string>
+    <string name="sens_normal">Normal</string>
+    <string name="sens_sensible">Sensible</string>
+    <string name="sens_extreme">Extrême</string>
+    <string name="btn_activate">🟢 Activer la protection</string>
+    <string name="btn_stop">🔴 Arrêter la protection</string>
+    <string name="btn_plus">Plus</string>
+    <string name="msg_invalid_number">Numéro invalide : 10 chiffres requis</string>
+    <string name="msg_finish_config">Termine d’abord la configuration</string>
+    <string name="msg_activated">Protection activée</string>
+    <string name="msg_stopped">Protection arrêtée</string>
+    <string name="msg_allow_settings">Autorise dans les réglages de l’appli</string>
+
+    <string name="how_title">Comment ça marche</string>
+    <string name="how_1_title">1. Prépare le téléphone.</string>
+    <string name="how_1_body">Laisse dans la voiture un téléphone avec une puce ayant au moins une unité de crédit, pour qu’il puisse appeler. Pas besoin d’internet.</string>
+    <string name="how_2_title">2. Active la protection.</string>
+    <string name="how_2_body">Entre ton numéro personnel (ou ton deuxième mobile), choisis la sensibilité, puis appuie sur « Activer la protection ».</string>
+    <string name="how_3_title">3. Reçois l’alerte.</string>
+    <string name="how_3_body">Si la voiture bouge, le téléphone t’appelle. Ne décroche pas : rejette l’appel et va voir ta voiture.</string>
+    <string name="btn_support">Contacter le support</string>
+    <string name="btn_share">🔗 Partager l’application</string>
+    <string name="btn_update">🔄 Vérifier les mises à jour</string>
+    <string name="btn_back">Retour à l’accueil</string>
+    <string name="support_msg">Bonjour, j’ai besoin d’aide avec l’application Antivol.\n\nTéléphone : %1$s\nAndroid : %2$s\nVersion de l’application : %3$s\n\nMon problème :</string>
+    <string name="share_text">Antivol : une application qui appelle ton téléphone si ta voiture bouge pendant la nuit.</string>
+    <string name="share_chooser">Partager l’application</string>
+
+    <string name="notif_channel_name">Protection antivol</string>
+    <string name="notif_channel_desc">Surveillance antivol active</string>
+    <string name="notif_title">Protection antivol active</string>
+    <string name="notif_text">Surveillance des mouvements en cours</string>
+</resources>
