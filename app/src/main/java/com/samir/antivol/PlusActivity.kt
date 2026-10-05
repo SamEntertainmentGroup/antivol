@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.text.Html
 import android.widget.*
@@ -14,8 +13,8 @@ import kotlin.math.roundToInt
 
 class PlusActivity : Activity() {
 
-    // Numéro WhatsApp du support : indicatif sans + ni 0 devant
-    private val SUPPORT_WHATSAPP = "213666912226"
+    // Page de contact de ton site (change seulement le nom de domaine)
+    private val SUPPORT_URL = "https://tonsite.com/contact"
 
     private val NOIR = Color.rgb(35, 38, 45)
 
@@ -91,15 +90,8 @@ class PlusActivity : Activity() {
 
     // ACTIONS
     private fun openSupport() {
-        val msg = getString(
-            R.string.support_msg,
-            "${Build.MANUFACTURER} ${Build.MODEL}",
-            Build.VERSION.RELEASE,
-            versionName()
-        ) + " "
-        val uri = Uri.parse("https://wa.me/$SUPPORT_WHATSAPP?text=${Uri.encode(msg)}")
         try {
-            startActivity(Intent(Intent.ACTION_VIEW, uri))
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(SUPPORT_URL)))
         } catch (_: Exception) {
         }
     }
@@ -131,13 +123,6 @@ class PlusActivity : Activity() {
             }
         }
     }
-
-    private fun versionName(): String =
-        try {
-            packageManager.getPackageInfo(packageName, 0).versionName ?: "1.0"
-        } catch (_: Exception) {
-            "1.0"
-        }
 
     // OUTILS D'INTERFACE
     private fun grayButton(label: String, onClick: () -> Unit): Button {
