@@ -143,10 +143,10 @@ class MotionService : Service(), SensorEventListener {
         val manager = getSystemService(NotificationManager::class.java)
         val channel = NotificationChannel(
             CHANNEL_ID,
-            "Protection antivol",
+            getString(R.string.notif_channel_name),
             NotificationManager.IMPORTANCE_LOW
         ).apply {
-            description = "Surveillance antivol active"
+            description = getString(R.string.notif_channel_desc)
             setShowBadge(false)
         }
         manager.createNotificationChannel(channel)
@@ -155,8 +155,8 @@ class MotionService : Service(), SensorEventListener {
     private fun createNotification(): Notification {
         return Notification.Builder(this, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_lock_idle_lock)
-            .setContentTitle("Protection antivol active")
-            .setContentText("Surveillance des mouvements en cours")
+            .setContentTitle(getString(R.string.notif_title))
+            .setContentText(getString(R.string.notif_text))
             .setOngoing(true)
             .setCategory(Notification.CATEGORY_SERVICE)
             .build()
