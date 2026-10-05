@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">مضاد السرقة</string>
+
+    <string name="status_active">الحماية مفعّلة</string>
+    <string name="status_inactive">الحماية غير مفعّلة</string>
+    <string name="config_title">⚠ إعداد مطلوب</string>
+    <string name="perm_call">إذن الاتصال</string>
+    <string name="perm_notif">إذن الإشعارات</string>
+    <string name="perm_battery">البطارية بدون قيود</string>
+    <string name="btn_authorize">السماح</string>
+    <string name="btn_ok">✓ تم</string>
+    <string name="section_number">الرقم المراد الاتصال به عند الإنذار</string>
+    <string name="section_sensitivity">الحساسية</string>
+    <string name="sens_normal">عادية</string>
+    <string name="sens_sensible">عالية</string>
+    <string name="sens_extreme">قصوى</string>
+    <string name="btn_activate">🟢 تفعيل الحماية</string>
+    <string name="btn_stop">🔴 إيقاف الحماية</string>
+    <string name="btn_plus">المزيد</string>
+    <string name="msg_invalid_number">رقم غير صحيح: يجب إدخال 10 أرقام</string>
+    <string name="msg_finish_config">أكمل الإعداد أولاً</string>
+    <string name="msg_activated">تم تفعيل الحماية</string>
+    <string name="msg_stopped">تم إيقاف الحماية</string>
+    <string name="msg_allow_settings">اسمح من إعدادات التطبيق</string>
+
+    <string name="how_title">كيف يعمل التطبيق</string>
+    <string name="how_1_title">1. جهّز الهاتف.</string>
+    <string name="how_1_body">اترك في السيارة هاتفًا بشريحة تحتوي على رصيد (وحدة واحدة على الأقل) حتى يتمكن من الاتصال. لا حاجة إلى الإنترنت.</string>
+    <string name="how_2_title">2. فعّل الحماية.</string>
+    <string name="how_2_body">أدخل رقمك الشخصي (أو هاتفك الثاني)، اختر الحساسية، ثم اضغط على «تفعيل الحماية».</string>
+    <string name="how_3_title">3. استقبل الإنذار.</string>
+    <string name="how_3_body">إذا تحركت السيارة، سيتصل بك الهاتف. لا تُجب على المكالمة: ارفضها واذهب لتفقد سيارتك.</string>
+    <string name="btn_support">التواصل مع الدعم</string>
+    <string name="btn_share">🔗 مشاركة التطبيق</string>
+    <string name="btn_update">🔄 البحث عن تحديثات</string>
+    <string name="btn_back">العودة إلى الصفحة الرئيسية</string>
+    <string name="support_msg">مرحبًا، أحتاج إلى مساعدة بخصوص تطبيق مضاد السرقة.\n\nالهاتف: %1$s\nأندرويد: %2$s\nإصدار التطبيق: %3$s\n\nمشكلتي:</string>
+    <string name="share_text">مضاد السرقة: تطبيق يتصل بهاتفك إذا تحركت سيارتك أثناء الليل.</string>
+    <string name="share_chooser">مشاركة التطبيق</string>
+
+    <string name="notif_channel_name">الحماية من السرقة</string>
+    <string name="notif_channel_desc">المراقبة ضد السرقة مفعّلة</string>
+    <string name="notif_title">حماية السيارة مفعّلة</string>
+    <string name="notif_text">جارٍ رصد الحركة</string>
+</resources>
