@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"/>
 
     <application android:label="@string/app_name"
-            android:theme="@android:style/Theme.Material.Light.NoActionBar">
+        android:theme="@android:style/Theme.Material.Light.NoActionBar">
         <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -16,6 +16,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".PlusActivity" android:exported="false"/>
+        <activity android:name=".UnlockActivity" android:exported="false"/>
         <service android:name=".MotionService" android:exported="false"
             android:foregroundServiceType="specialUse">
             <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
