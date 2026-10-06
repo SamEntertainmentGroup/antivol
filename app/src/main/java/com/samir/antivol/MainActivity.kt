@@ -43,7 +43,7 @@ class MainActivity : Activity() {
         R.string.sens_sensible,
         R.string.sens_extreme
     )
-    private val choiceValues = listOf(0.30f, 0.10f, 0.03f)
+    private val choiceValues = listOf(0.40f, 0.20f, 0.10f)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
