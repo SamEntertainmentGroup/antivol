@@ -13,9 +13,6 @@ import kotlin.math.roundToInt
 
 class PlusActivity : Activity() {
 
-    // Page de contact de ton site (change seulement le nom de domaine)
-    private val SUPPORT_URL = "https://tonsite.com/contact"
-
     private val NOIR = Color.rgb(35, 38, 45)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,9 +46,11 @@ class PlusActivity : Activity() {
         })
         root.addView(howCard)
 
-        // CONTACTER LE SUPPORT
+        // DÉBLOQUER LA SENSIBILITÉ
         root.addView(
-            grayButton(getString(R.string.btn_support)) { openSupport() },
+            grayButton(getString(R.string.btn_unlock)) {
+                startActivity(Intent(this@PlusActivity, UnlockActivity::class.java))
+            },
             LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 dp(56)
@@ -89,13 +88,6 @@ class PlusActivity : Activity() {
     }
 
     // ACTIONS
-    private fun openSupport() {
-        try {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(SUPPORT_URL)))
-        } catch (_: Exception) {
-        }
-    }
-
     private fun share() {
         val intent = Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"
