@@ -181,9 +181,8 @@ class MainActivity : Activity() {
             orientation = RadioGroup.VERTICAL
         }
 
-        val currentMode = prefs
-            .getInt("mode", 0)
-            .coerceIn(0, 2)
+        val currentMode =
+            if (License.isUnlocked(this)) prefs.getInt("mode", 0).coerceIn(0, 2) else 0
 
         choiceNames.forEachIndexed { index, nameRes ->
 
@@ -195,6 +194,12 @@ class MainActivity : Activity() {
                     setTextColor(Color.rgb(35, 38, 45))
                     setPaddingRelative(dp(4), dp(10), 0, dp(10))
                     isChecked = index == currentMode
+                    setOnClickListener {
+                        if (index > 0 && !License.isUnlocked(this@MainActivity)) {
+                            sensitivityGroup.check(100)
+                            showBanner(getString(R.string.msg_locked_option), false)
+                        }
+                    }
                 }
             )
 
@@ -292,6 +297,7 @@ class MainActivity : Activity() {
 
         root.addView(buttons)
 
+        refreshSensitivity()
         updateStatus(prefs.getBoolean("active", false))
         refreshConfig()
 
@@ -314,9 +320,12 @@ class MainActivity : Activity() {
                 return@setOnClickListener
             }
 
-            val index = (
-                sensitivityGroup.checkedRadioButtonId - 100
-            ).coerceIn(0, 2)
+            val canChoose = License.isUnlocked(this)
+            val index = if (canChoose) {
+                (sensitivityGroup.checkedRadioButtonId - 100).coerceIn(0, 2)
+            } else {
+                0
+            }
 
             prefs.edit()
                 .putString("num", num)
@@ -389,6 +398,7 @@ class MainActivity : Activity() {
     override fun onResume() {
         super.onResume()
         refreshConfig()
+        refreshSensitivity()
     }
 
     override fun onDestroy() {
@@ -421,6 +431,23 @@ class MainActivity : Activity() {
                     Uri.parse("package:$packageName")
                 )
             )
+        }
+    }
+
+    // SENSIBILITÉ : cadenas tant que le code n'est pas valide
+    private fun refreshSensitivity() {
+        val unlocked = License.isUnlocked(this)
+
+        choiceNames.forEachIndexed { index, nameRes ->
+            val radio = sensitivityGroup.findViewById<RadioButton>(100 + index)
+            if (radio != null) {
+                val locked = index > 0 && !unlocked
+                radio.text = if (locked) "🔒 " + getString(nameRes) else getString(nameRes)
+            }
+        }
+
+        if (!unlocked && sensitivityGroup.checkedRadioButtonId != 100) {
+            sensitivityGroup.check(100)
         }
     }
 
