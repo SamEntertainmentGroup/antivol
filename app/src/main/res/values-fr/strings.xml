@@ -18,7 +18,7 @@
     <string name="btn_activate">🟢 Activer la protection</string>
     <string name="btn_stop">🔴 Arrêter la protection</string>
     <string name="btn_plus">Plus</string>
-    <string name="msg_invalid_number">Numéro invalide : 10 chiffres requis</string>
+    <string name="msg_invalid_number">Entre un numéro valide</string>
     <string name="msg_finish_config">Termine d’abord la configuration</string>
     <string name="msg_activated">Protection activée</string>
     <string name="msg_stopped">Protection arrêtée</string>
