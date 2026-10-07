@@ -46,24 +46,13 @@ class PlusActivity : Activity() {
         })
         root.addView(howCard)
 
-        // DÉBLOQUER LA SENSIBILITÉ
-        root.addView(
-            grayButton(getString(R.string.btn_unlock)) {
-                startActivity(Intent(this@PlusActivity, UnlockActivity::class.java))
-            },
-            LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                dp(56)
-            ).apply { topMargin = dp(16) }
-        )
-
         // PARTAGER
         root.addView(
             grayButton(getString(R.string.btn_share)) { share() },
             LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 dp(56)
-            ).apply { topMargin = dp(12) }
+            ).apply { topMargin = dp(16) }
         )
 
         // VÉRIFIER LES MISES À JOUR
