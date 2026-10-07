@@ -23,7 +23,6 @@
     <string name="msg_activated">Protection activée</string>
     <string name="msg_stopped">Protection arrêtée</string>
     <string name="msg_allow_settings">Autorise dans les réglages de l’appli</string>
-    <string name="msg_locked_option">🔒 Débloque ce niveau dans Plus</string>
 
     <string name="how_title">Comment ça marche</string>
     <string name="how_1_title">1. Prépare le téléphone.</string>
@@ -32,28 +31,11 @@
     <string name="how_2_body">Entre ton numéro personnel (ou ton deuxième mobile), choisis la sensibilité, puis appuie sur « Activer la protection ».</string>
     <string name="how_3_title">3. Reçois l’alerte.</string>
     <string name="how_3_body">Si la voiture bouge, le téléphone t’appelle. Ne décroche pas : rejette l’appel et va voir ta voiture.</string>
-    <string name="btn_unlock">🔓 Débloquer la sensibilité</string>
     <string name="btn_share">🔗 Partager l’application</string>
     <string name="btn_update">🔄 Vérifier les mises à jour</string>
     <string name="btn_back">Retour à l’accueil</string>
     <string name="share_text">Antivol : une application qui appelle ton téléphone si ta voiture bouge pendant la nuit.</string>
     <string name="share_chooser">Partager l’application</string>
-
-    <string name="unlock_title">Débloquer la sensibilité</string>
-    <string name="unlock_intro">Choisis le niveau Sensible ou Extrême pendant 12 mois.</string>
-    <string name="unlock_status_on">Débloqué jusqu’au %1$s</string>
-    <string name="unlock_status_off">Verrouillé : sensibilité Normale uniquement</string>
-    <string name="unlock_device_label">Ton code appareil</string>
-    <string name="btn_copy">Copier</string>
-    <string name="msg_copied">Code copié</string>
-    <string name="btn_get_code">💬 Obtenir un code d’activation</string>
-    <string name="unlock_enter_label">Entre le code d’activation</string>
-    <string name="unlock_code_hint">XXXXX-XXXXX</string>
-    <string name="btn_validate">Valider</string>
-    <string name="msg_code_ok">Sensibilité débloquée</string>
-    <string name="msg_code_invalid">Code invalide</string>
-    <string name="msg_code_expired">Ce code a expiré</string>
-    <string name="unlock_msg">Bonjour, je veux débloquer la sensibilité pour 12 mois.\nMon code appareil : %1$s</string>
 
     <string name="notif_channel_name">Protection antivol</string>
     <string name="notif_channel_desc">Surveillance antivol active</string>
