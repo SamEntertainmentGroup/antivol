@@ -155,7 +155,7 @@ class MainActivity : Activity() {
         val phoneCard = createCard()
 
         phoneInput = EditText(this).apply {
-            hint = "XXXXXXXX"
+            hint = "0123456789"
             textSize = 17f
             inputType = InputType.TYPE_CLASS_PHONE
             setSingleLine(true)
