@@ -23,7 +23,6 @@
     <string name="msg_activated">Protection activated</string>
     <string name="msg_stopped">Protection stopped</string>
     <string name="msg_allow_settings">Allow it in the app settings</string>
-    <string name="msg_locked_option">🔒 Unlock this level in More</string>
 
     <string name="how_title">How it works</string>
     <string name="how_1_title">1. Prepare the phone.</string>
@@ -32,28 +31,11 @@
     <string name="how_2_body">Enter your personal number (or your second mobile), choose the sensitivity, then tap “Activate protection”.</string>
     <string name="how_3_title">3. Receive the alert.</string>
     <string name="how_3_body">If the car moves, the phone calls you. Don’t answer: reject the call and go check your car.</string>
-    <string name="btn_unlock">🔓 Unlock sensitivity</string>
     <string name="btn_share">🔗 Share the app</string>
     <string name="btn_update">🔄 Check for updates</string>
     <string name="btn_back">Back to home</string>
     <string name="share_text">Anti-theft: an app that calls your phone if your car moves during the night.</string>
     <string name="share_chooser">Share the app</string>
-
-    <string name="unlock_title">Unlock sensitivity</string>
-    <string name="unlock_intro">Choose the High or Extreme level for 12 months.</string>
-    <string name="unlock_status_on">Unlocked until %1$s</string>
-    <string name="unlock_status_off">Locked: Normal sensitivity only</string>
-    <string name="unlock_device_label">Your device code</string>
-    <string name="btn_copy">Copy</string>
-    <string name="msg_copied">Code copied</string>
-    <string name="btn_get_code">💬 Get an activation code</string>
-    <string name="unlock_enter_label">Enter the activation code</string>
-    <string name="unlock_code_hint">XXXXX-XXXXX</string>
-    <string name="btn_validate">Validate</string>
-    <string name="msg_code_ok">Sensitivity unlocked</string>
-    <string name="msg_code_invalid">Invalid code</string>
-    <string name="msg_code_expired">This code has expired</string>
-    <string name="unlock_msg">Hello, I want to unlock the sensitivity for 12 months.\nMy device code: %1$s</string>
 
     <string name="notif_channel_name">Anti-theft protection</string>
     <string name="notif_channel_desc">Anti-theft monitoring is on</string>
