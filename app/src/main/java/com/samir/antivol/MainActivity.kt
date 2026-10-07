@@ -155,11 +155,11 @@ class MainActivity : Activity() {
         val phoneCard = createCard()
 
         phoneInput = EditText(this).apply {
-            hint = "06XXXXXXXX"
+            hint = "XXXXXXXX"
             textSize = 17f
             inputType = InputType.TYPE_CLASS_PHONE
             setSingleLine(true)
-            filters = arrayOf(InputFilter.LengthFilter(10))
+            filters = arrayOf(InputFilter.LengthFilter(20))
             setPadding(dp(14), dp(12), dp(14), dp(12))
             setText(prefs.getString("num", ""))
             background = roundedBackground(
@@ -306,9 +306,9 @@ class MainActivity : Activity() {
 
             hideKeyboard()
 
-            val num = phoneInput.text.toString().trim()
+            val num = phoneInput.text.toString().replace(Regex("[\\s\\-().]"), "")
 
-            if (!num.matches(Regex("^\\d{10}$"))) {
+            if (!num.matches(Regex("^\\d{6,15}$"))) {
                 showBanner(getString(R.string.msg_invalid_number), false)
                 return@setOnClickListener
             }
