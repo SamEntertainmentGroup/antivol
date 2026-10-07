@@ -16,7 +16,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".PlusActivity" android:exported="false"/>
-        <activity android:name=".UnlockActivity" android:exported="false"/>
         <service android:name=".MotionService" android:exported="false"
             android:foregroundServiceType="specialUse">
             <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
