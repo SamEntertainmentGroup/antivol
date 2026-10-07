@@ -18,7 +18,7 @@
     <string name="btn_activate">🟢 تفعيل الحماية</string>
     <string name="btn_stop">🔴 إيقاف الحماية</string>
     <string name="btn_plus">المزيد</string>
-    <string name="msg_invalid_number">رقم غير صحيح: يجب إدخال 10 أرقام</string>
+    <string name="msg_invalid_number">أدخل رقمًا صحيحًا</string>
     <string name="msg_finish_config">أكمل الإعداد أولاً</string>
     <string name="msg_activated">تم تفعيل الحماية</string>
     <string name="msg_stopped">تم إيقاف الحماية</string>
