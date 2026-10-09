@@ -32,7 +32,6 @@
     <string name="how_3_title">3. Reçois l’alerte.</string>
     <string name="how_3_body">Si la voiture bouge, le téléphone t’appelle. Ne décroche pas : rejette l’appel et va voir ta voiture.</string>
     <string name="btn_share">🔗 Partager l’application</string>
-    <string name="btn_update">🔄 Vérifier les mises à jour</string>
     <string name="btn_back">Retour à l’accueil</string>
     <string name="share_text">Antivol : une application qui appelle ton téléphone si ta voiture bouge pendant la nuit.</string>
     <string name="share_chooser">Partager l’application</string>
