@@ -3,10 +3,10 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 android {
-    namespace 'com.samir.antivol'
+    namespace 'com.autoalert.app'
     compileSdk 34
     defaultConfig {
-        applicationId 'com.samir.antivol'
+        applicationId 'com.autoalert.app'
         minSdk 26
         targetSdk 34
         versionCode 1
