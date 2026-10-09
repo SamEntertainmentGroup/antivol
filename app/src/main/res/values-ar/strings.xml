@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">مضاد السرقة</string>
+    <string name="app_name">AutoAlert</string>
 
     <string name="status_active">الحماية مفعّلة</string>
     <string name="status_inactive">الحماية غير مفعّلة</string>
