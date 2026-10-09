@@ -32,7 +32,6 @@
     <string name="how_3_title">3. Receive the alert.</string>
     <string name="how_3_body">If the car moves, the phone calls you. Don’t answer: reject the call and go check your car.</string>
     <string name="btn_share">🔗 Share the app</string>
-    <string name="btn_update">🔄 Check for updates</string>
     <string name="btn_back">Back to home</string>
     <string name="share_text">Anti-theft: an app that calls your phone if your car moves during the night.</string>
     <string name="share_chooser">Share the app</string>
