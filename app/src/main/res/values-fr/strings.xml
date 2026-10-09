@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Antivol</string>
+    <string name="app_name">AutoAlert</string>
 
     <string name="status_active">Protection active</string>
     <string name="status_inactive">Protection non active</string>
