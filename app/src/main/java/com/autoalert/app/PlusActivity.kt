@@ -5,7 +5,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
-import android.net.Uri
 import android.os.Bundle
 import android.text.Html
 import android.widget.*
@@ -55,15 +54,6 @@ class PlusActivity : Activity() {
             ).apply { topMargin = dp(16) }
         )
 
-        // VÉRIFIER LES MISES À JOUR
-        root.addView(
-            grayButton(getString(R.string.btn_update)) { checkUpdate() },
-            LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                dp(56)
-            ).apply { topMargin = dp(12) }
-        )
-
         // RETOUR
         root.addView(
             backButton(getString(R.string.btn_back)) { finish() },
@@ -87,22 +77,6 @@ class PlusActivity : Activity() {
             )
         }
         startActivity(Intent.createChooser(intent, getString(R.string.share_chooser)))
-    }
-
-    private fun checkUpdate() {
-        try {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$packageName")))
-        } catch (_: Exception) {
-            try {
-                startActivity(
-                    Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse("https://play.google.com/store/apps/details?id=$packageName")
-                    )
-                )
-            } catch (_: Exception) {
-            }
-        }
     }
 
     // OUTILS D'INTERFACE
