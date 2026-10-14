@@ -214,7 +214,7 @@ class MainActivity : Activity() {
         }
 
         val toggleBox = FrameLayout(this).apply {
-            setPadding(0, dp(28), 0, dp(10))
+            setPadding(0, dp(40), 0, dp(25))
         }
 
         toggleBox.addView(
