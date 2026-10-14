@@ -141,9 +141,8 @@ class MainActivity : Activity() {
 
         val sensitivityCard = createCard()
 
-        val currentMode = prefs
-            .getInt("mode", 0)
-            .coerceIn(0, 2)
+        val currentMode =
+            if (License.isUnlocked(this)) prefs.getInt("mode", 0).coerceIn(0, 2) else 0
 
         sensitivityBar = SeekBar(this).apply {
             max = 2
@@ -152,6 +151,12 @@ class MainActivity : Activity() {
             thumbTintList = android.content.res.ColorStateList.valueOf(Color.rgb(35, 38, 45))
             setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(bar: SeekBar?, value: Int, fromUser: Boolean) {
+                    if (fromUser && value > 0 && !License.isUnlocked(this@MainActivity)) {
+                        bar?.progress = 0
+                        highlightSensitivity(0)
+                        showBanner(getString(R.string.msg_locked_option), false)
+                        return
+                    }
                     highlightSensitivity(value)
                 }
                 override fun onStartTrackingTouch(bar: SeekBar?) {}
@@ -194,6 +199,7 @@ class MainActivity : Activity() {
         sensitivityCard.addView(labelsRow)
         root.addView(sensitivityCard)
         highlightSensitivity(currentMode)
+        refreshSensitivity()
 
         // GRAND BOUTON ROND : cadenas fermé = actif, ouvert = inactif
         toggleBtn = Button(this).apply {
@@ -289,7 +295,8 @@ class MainActivity : Activity() {
                 return@setOnClickListener
             }
 
-            val index = sensitivityBar.progress.coerceIn(0, 2)
+            val index =
+                if (License.isUnlocked(this)) sensitivityBar.progress.coerceIn(0, 2) else 0
 
             prefs.edit()
                 .putString("num", num)
@@ -344,6 +351,7 @@ class MainActivity : Activity() {
     override fun onResume() {
         super.onResume()
         refreshConfig()
+        refreshSensitivity()
     }
 
     override fun onDestroy() {
@@ -682,6 +690,21 @@ class MainActivity : Activity() {
         // Sensibilité modifiable uniquement
         // lorsque la protection est arrêtée
         sensitivityBar.isEnabled = !active
+    }
+
+    // Cadenas sur Sensible et Extrême tant qu'aucun code valide n'est saisi
+    private fun refreshSensitivity() {
+        val unlocked = License.isUnlocked(this)
+
+        choiceNames.forEachIndexed { index, nameRes ->
+            val locked = index > 0 && !unlocked
+            sensitivityLabels.getOrNull(index)?.text =
+                if (locked) "🔒 " + getString(nameRes) else getString(nameRes)
+        }
+
+        if (!unlocked && sensitivityBar.progress != 0) {
+            sensitivityBar.progress = 0
+        }
     }
 
     private fun highlightSensitivity(selected: Int) {

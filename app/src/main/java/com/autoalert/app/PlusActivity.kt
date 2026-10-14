@@ -15,8 +15,6 @@ class PlusActivity : Activity() {
 
     private val NOIR = Color.rgb(35, 38, 45)
 
-    // Identifiant de ta page ou de ton profil Messenger (la partie après m.me/)
-    private val MESSENGER = "TON_PSEUDO_MESSENGER"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,13 +47,24 @@ class PlusActivity : Activity() {
         })
         root.addView(howCard)
 
+        // DÉBLOQUER LA SENSIBILITÉ
+        root.addView(
+            grayButton(getString(R.string.btn_unlock)) {
+                startActivity(Intent(this@PlusActivity, UnlockActivity::class.java))
+            },
+            LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                dp(56)
+            ).apply { topMargin = dp(16) }
+        )
+
         // PARTAGER
         root.addView(
             grayButton(getString(R.string.btn_share)) { share() },
             LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 dp(56)
-            ).apply { topMargin = dp(16) }
+            ).apply { topMargin = dp(12) }
         )
 
         // CONTACT (Messenger)
@@ -94,7 +103,7 @@ class PlusActivity : Activity() {
 
     private fun openMessenger() {
         try {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://m.me/$MESSENGER")))
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(License.MESSENGER)))
         } catch (_: Exception) {
         }
     }
