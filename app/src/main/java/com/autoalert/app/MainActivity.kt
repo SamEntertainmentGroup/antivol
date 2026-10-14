@@ -654,19 +654,20 @@ class MainActivity : Activity() {
         }
     }
 
-    // ÉTAT : bouton rond (cadenas fermé / ouvert) et barre de sensibilité
+    
+    // ÉTAT : bouton rond plein, vert ou rouge
     private fun updateStatus(
         active: Boolean
     ) {
 
-        val color =
-            if (active) {
-                Color.rgb(25, 145, 80)
-            } else {
-                Color.rgb(200, 50, 60)
-            }
+        val color = if (active) {
+            Color.rgb(8, 120, 61)    // Vert foncé
+        } else {
+            Color.rgb(197, 22, 37)   // Rouge foncé
+        }
 
         toggleBtn.text = if (active) "🔒" else "🔓"
+        toggleBtn.setTextColor(Color.WHITE)
 
         toggleBtn.contentDescription =
             if (active) {
@@ -677,14 +678,7 @@ class MainActivity : Activity() {
 
         toggleBtn.background = GradientDrawable().apply {
             shape = GradientDrawable.OVAL
-            setColor(
-                if (active) {
-                    Color.rgb(205, 235, 215)
-                } else {
-                    Color.rgb(245, 205, 210)
-                }
-            )
-            setStroke(dp(5), color)
+            setColor(color)
         }
 
         // Sensibilité modifiable uniquement
