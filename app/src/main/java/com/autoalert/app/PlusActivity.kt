@@ -55,7 +55,7 @@ class PlusActivity : Activity() {
             LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 dp(56)
-            ).apply { topMargin = dp(16) }
+            ).apply { topMargin = dp(24) }
         )
 
         // PARTAGER
@@ -64,7 +64,7 @@ class PlusActivity : Activity() {
             LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 dp(56)
-            ).apply { topMargin = dp(12) }
+            ).apply { topMargin = dp(24) }
         )
 
         // CONTACT (Messenger)
@@ -73,7 +73,7 @@ class PlusActivity : Activity() {
             LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 dp(56)
-            ).apply { topMargin = dp(12) }
+            ).apply { topMargin = dp(24) }
         )
 
         // RETOUR
