@@ -226,6 +226,9 @@ class MainActivity : Activity() {
             )
         )
 
+        // Ombre du bouton
+        toggleBtn.elevation = dp(8).toFloat()
+        
         root.addView(toggleBox)
 
         // BOUTON PLUS
