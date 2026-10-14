@@ -3,75 +3,71 @@
 <resources>
     <string name="app_name">AutoAlert</string>
 
-    <!-- Configuration et autorisations -->
-    <string name="status_active">Protection active</string>
-    <string name="status_inactive">Protection non active</string>
-    <string name="config_title">⚠ Configuration requise</string>
-    <string name="perm_call">Autorisation d’appel</string>
-    <string name="perm_notif">Autorisation de notification</string>
-    <string name="perm_battery">Batterie sans restriction</string>
-    <string name="btn_authorize">Autoriser</string>
+    <!-- Configuration and permissions -->
+    <string name="config_title">⚠ Configuration required</string>
+    <string name="perm_call">Phone call permission</string>
+    <string name="perm_notif">Notification permission</string>
+    <string name="perm_battery">Unrestricted battery usage</string>
+    <string name="btn_authorize">Allow</string>
     <string name="btn_ok">✓ OK</string>
 
-    <!-- Accueil -->
-    <string name="section_number">Numéro à appeler en cas d’alerte</string>
-    <string name="section_sensitivity">Sensibilité</string>
+    <!-- Home screen -->
+    <string name="section_sensitivity">Sensitivity</string>
     <string name="sens_normal">Normal</string>
-    <string name="sens_sensible">Sensible</string>
-    <string name="sens_extreme">Extrême</string>
-    <string name="phone_hint">Entre ton numéro de téléphone</string>
-    <string name="toggle_active">Protection activée</string>
-    <string name="toggle_inactive">Protection désactivée</string>
-    <string name="btn_activate">🟢 Activer la protection</string>
-    <string name="btn_stop">🔴 Arrêter la protection</string>
-    <string name="btn_plus">Plus</string>
+    <string name="sens_sensible">Sensitive</string>
+    <string name="sens_extreme">Extreme</string>
+    <string name="toggle_active">Protection enabled</string>
+    <string name="toggle_inactive">Protection disabled</string>
+    <string name="section_number">Phone number to call for an alert</string>
+    <string name="phone_hint">Enter your phone number</string>
+    <string name="btn_plus">More</string>
 
-    <!-- Messages de protection -->
-    <string name="msg_invalid_number">Entre un numéro valide</string>
-    <string name="msg_finish_config">Termine d’abord la configuration</string>
-    <string name="msg_activated">Protection activée</string>
-    <string name="msg_stopped">Protection arrêtée</string>
-    <string name="msg_allow_settings">Autorise dans les réglages de l’appli</string>
-    <string name="msg_locked_option">Cette sensibilité nécessite un déblocage</string>
-    <string name="msg_start_error">Impossible de démarrer la protection</string>
+    <!-- Protection messages -->
+    <string name="msg_invalid_number">Enter a valid phone number</string>
+    <string name="msg_finish_config">Complete the configuration first</string>
+    <string name="msg_activated">Protection enabled</string>
+    <string name="msg_stopped">Protection stopped</string>
+    <string name="msg_allow_settings">Allow access in the app settings</string>
+    <string name="msg_locked_option">Unlock this level in the More menu</string>
+    <string name="msg_start_error">Could not start protection. Check the permissions.</string>
 
-    <!-- Comment ça marche -->
-    <string name="how_title">Comment ça marche</string>
-    <string name="how_1_title">1. Prépare le téléphone.</string>
-    <string name="how_1_body">Laisse dans la voiture un téléphone avec une carte SIM et du crédit pour pouvoir appeler. Pas besoin d’internet.</string>
-    <string name="how_2_title">2. Active la protection.</string>
-    <string name="how_2_body">Entre ton numéro personnel ou celui de ton deuxième mobile, choisis la sensibilité, puis active la protection.</string>
-    <string name="how_3_title">3. Reçois l’alerte.</string>
-    <string name="how_3_body">Si la voiture bouge, le téléphone t’appelle. Rejette l’appel et vérifie ta voiture.</string>
+    <!-- How it works -->
+    <string name="how_title">How it works</string>
+    <string name="how_1_title">1. Prepare the phone.</string>
+    <string name="how_1_body">Leave a phone with a SIM card and call credit in your car. No internet connection is needed.</string>
+    <string name="how_2_title">2. Enable protection.</string>
+    <string name="how_2_body">Enter your personal number or the number of your second phone, choose the sensitivity, then enable protection.</string>
+    <string name="how_3_title">3. Receive the alert.</string>
+    <string name="how_3_body">If the car moves, the phone calls you. Reject the call and check your car.</string>
 
-    <!-- Menu Plus -->
-    <string name="btn_unlock">Débloquer la sensibilité</string>
+    <!-- More menu -->
+    <string name="btn_unlock">Unlock sensitivity</string>
     <string name="btn_contact">Contact</string>
-    <string name="btn_share">Partager l’application</string>
-    <string name="btn_back">Retour à l’accueil</string>
-    <string name="share_text">AutoAlert : une application qui t’appelle si ta voiture bouge pendant la nuit.</string>
-    <string name="share_chooser">Partager l’application</string>
-    <string name="msg_messenger_error">Impossible d’ouvrir Messenger. Vérifie que ton navigateur fonctionne.</string>
+    <string name="btn_share">Share the app</string>
+    <string name="btn_back">Back to home</string>
+    <string name="share_text">AutoAlert: an app that calls you if your car moves during the night.</string>
+    <string name="share_chooser">Share the app</string>
+    <string name="msg_messenger_error">Could not open Messenger. Check that your browser is working.</string>
 
-    <!-- Déblocage de la sensibilité -->
-    <string name="unlock_title">Débloquer la sensibilité</string>
-    <string name="unlock_intro">Utilise ton code appareil pour demander un code de déblocage.</string>
-    <string name="unlock_device_label">Ton code appareil</string>
-    <string name="btn_copy">Copier</string>
-    <string name="btn_get_code">Demander un code sur Messenger</string>
-    <string name="unlock_enter_label">Saisir le code de déblocage</string>
-    <string name="unlock_code_hint">Code de déblocage</string>
-    <string name="btn_validate">Valider le code</string>
-    <string name="unlock_status_on">Sensibilité débloquée jusqu’au %1$s</string>
-    <string name="unlock_status_off">Sensibilité supplémentaire verrouillée</string>
-    <string name="msg_code_ok">Code accepté. Sensibilité débloquée.</string>
-    <string name="msg_code_expired">Ce code a expiré.</string>
-    <string name="msg_code_invalid">Code invalide.</string>
-    <string name="msg_copied">Code appareil copié.</string>
+    <!-- Sensitivity unlock -->
+    <string name="unlock_title">Unlock sensitivity</string>
+    <string name="unlock_intro">Use your device code to request an unlock code.</string>
+    <string name="unlock_device_label">Your device code</string>
+    <string name="btn_copy">Copy</string>
+    <string name="btn_get_code">Request a code on Messenger</string>
+    <string name="unlock_enter_label">Enter the unlock code</string>
+    <string name="unlock_code_hint">XXXXX-XXXXX</string>
+    <string name="btn_validate">Validate code</string>
+    <string name="unlock_status_on">Sensitivity unlocked until %1$s</string>
+    <string name="unlock_status_off">Additional sensitivity locked</string>
+    <string name="msg_code_ok">Code accepted. Sensitivity unlocked.</string>
+    <string name="msg_code_expired">This code has expired.</string>
+    <string name="msg_code_invalid">Invalid code.</string>
+    <string name="msg_copied">Device code copied.</string>
 
-    <!-- Notification -->
-    <string name="notif_channel_name">Protection antivol</string>
-    <string name="notif_channel_desc">Surveillance antivol active</string>
-    <string name="notif_title">Protection antivol active</string>
-    <string name="notif_text">Surveillance des mouvements en cours</string>
+    <!-- Protection notification -->
+    <string name="notif_channel_name">Anti-theft protection</string>
+    <string name="notif_channel_desc">Active anti-theft monitoring</string>
+    <string name="notif_title">Anti-theft protection active</string>
+    <string name="notif_text">Monitoring movement</string>
 </resources>
