@@ -1,43 +1,73 @@
+
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">AutoAlert</string>
 
-    <string name="status_active">الحماية مفعّلة</string>
-    <string name="status_inactive">الحماية غير مفعّلة</string>
-    <string name="config_title">⚠ إعداد مطلوب</string>
-    <string name="perm_call">إذن الاتصال</string>
+    <!-- الإعدادات والأذونات -->
+    <string name="config_title">⚠ الإعدادات المطلوبة</string>
+    <string name="perm_call">إذن إجراء المكالمات</string>
     <string name="perm_notif">إذن الإشعارات</string>
-    <string name="perm_battery">البطارية بدون قيود</string>
-    <string name="btn_authorize">السماح</string>
-    <string name="btn_ok">✓ تم</string>
-    <string name="section_number">الرقم المراد الاتصال به عند الإنذار</string>
+    <string name="perm_battery">السماح بالتشغيل دون قيود البطارية</string>
+    <string name="btn_authorize">سماح</string>
+    <string name="btn_ok">✓ موافق</string>
+
+    <!-- الشاشة الرئيسية -->
     <string name="section_sensitivity">الحساسية</string>
-    <string name="sens_normal">عادية</string>
-    <string name="sens_sensible">عالية</string>
-    <string name="sens_extreme">قصوى</string>
-    <string name="btn_activate">🟢 تفعيل الحماية</string>
-    <string name="btn_stop">🔴 إيقاف الحماية</string>
+    <string name="sens_normal">عادي</string>
+    <string name="sens_sensible">حساس</string>
+    <string name="sens_extreme">شديد</string>
+    <string name="toggle_active">الحماية مفعّلة</string>
+    <string name="toggle_inactive">الحماية متوقفة</string>
+    <string name="section_number">رقم الهاتف الذي سيتلقى التنبيه</string>
+    <string name="phone_hint">أدخل رقم هاتفك</string>
     <string name="btn_plus">المزيد</string>
-    <string name="msg_invalid_number">أدخل رقمًا صحيحًا</string>
-    <string name="msg_finish_config">أكمل الإعداد أولاً</string>
+
+    <!-- رسائل الحماية -->
+    <string name="msg_invalid_number">أدخل رقم هاتف صحيحًا</string>
+    <string name="msg_finish_config">أكمل الإعدادات أولاً</string>
     <string name="msg_activated">تم تفعيل الحماية</string>
     <string name="msg_stopped">تم إيقاف الحماية</string>
-    <string name="msg_allow_settings">اسمح من إعدادات التطبيق</string>
+    <string name="msg_allow_settings">اسمح بالوصول من إعدادات التطبيق</string>
+    <string name="msg_locked_option">افتح هذا المستوى من قائمة المزيد</string>
+    <string name="msg_start_error">تعذر تشغيل الحماية. تحقق من الأذونات.</string>
 
+    <!-- كيف يعمل التطبيق -->
     <string name="how_title">كيف يعمل التطبيق</string>
     <string name="how_1_title">1. جهّز الهاتف.</string>
-    <string name="how_1_body">اترك في السيارة هاتفًا بشريحة تحتوي على رصيد (وحدة واحدة على الأقل) حتى يتمكن من الاتصال. لا حاجة إلى الإنترنت.</string>
+    <string name="how_1_body">اترك في السيارة هاتفًا يحتوي على شريحة SIM ورصيد لإجراء المكالمات. لا يحتاج التطبيق إلى الإنترنت.</string>
     <string name="how_2_title">2. فعّل الحماية.</string>
-    <string name="how_2_body">أدخل رقمك الشخصي (أو هاتفك الثاني)، اختر الحساسية، ثم اضغط على «تفعيل الحماية».</string>
-    <string name="how_3_title">3. استقبل الإنذار.</string>
-    <string name="how_3_body">إذا تحركت السيارة، سيتصل بك الهاتف. لا تُجب على المكالمة: ارفضها واذهب لتفقد سيارتك.</string>
-    <string name="btn_share">🔗 مشاركة التطبيق</string>
-    <string name="btn_back">العودة إلى الصفحة الرئيسية</string>
-    <string name="share_text">مضاد السرقة: تطبيق يتصل بهاتفك إذا تحركت سيارتك أثناء الليل.</string>
-    <string name="share_chooser">مشاركة التطبيق</string>
+    <string name="how_2_body">أدخل رقم هاتفك الشخصي أو رقم هاتفك الثاني، واختر مستوى الحساسية، ثم فعّل الحماية.</string>
+    <string name="how_3_title">3. استقبل التنبيه.</string>
+    <string name="how_3_body">إذا تحركت السيارة، سيتصل بك الهاتف. ارفض المكالمة وتحقق من سيارتك.</string>
 
+    <!-- قائمة المزيد -->
+    <string name="btn_unlock">فتح مستوى الحساسية</string>
+    <string name="btn_contact">اتصل بنا</string>
+    <string name="btn_share">مشاركة التطبيق</string>
+    <string name="btn_back">العودة إلى الرئيسية</string>
+    <string name="share_text">AutoAlert: تطبيق يتصل بك إذا تحركت سيارتك أثناء الليل.</string>
+    <string name="share_chooser">مشاركة التطبيق</string>
+    <string name="msg_messenger_error">تعذر فتح Messenger. تحقق من عمل المتصفح.</string>
+
+    <!-- فتح مستوى الحساسية -->
+    <string name="unlock_title">فتح مستوى الحساسية</string>
+    <string name="unlock_intro">استخدم رمز جهازك لطلب رمز فتح الحساسية.</string>
+    <string name="unlock_device_label">رمز جهازك</string>
+    <string name="btn_copy">نسخ</string>
+    <string name="btn_get_code">طلب رمز عبر Messenger</string>
+    <string name="unlock_enter_label">أدخل رمز الفتح</string>
+    <string name="unlock_code_hint">XXXXX-XXXXX</string>
+    <string name="btn_validate">التحقق من الرمز</string>
+    <string name="unlock_status_on">تم فتح الحساسية حتى %1$s</string>
+    <string name="unlock_status_off">مستوى الحساسية الإضافي مقفل</string>
+    <string name="msg_code_ok">تم قبول الرمز وفتح مستوى الحساسية.</string>
+    <string name="msg_code_expired">انتهت صلاحية هذا الرمز.</string>
+    <string name="msg_code_invalid">الرمز غير صحيح.</string>
+    <string name="msg_copied">تم نسخ رمز الجهاز.</string>
+
+    <!-- إشعار الحماية -->
     <string name="notif_channel_name">الحماية من السرقة</string>
-    <string name="notif_channel_desc">المراقبة ضد السرقة مفعّلة</string>
-    <string name="notif_title">حماية السيارة مفعّلة</string>
-    <string name="notif_text">جارٍ رصد الحركة</string>
+    <string name="notif_channel_desc">مراقبة الحماية من السرقة نشطة</string>
+    <string name="notif_title">الحماية من السرقة مفعّلة</string>
+    <string name="notif_text">تجري مراقبة الحركة</string>
 </resources>
