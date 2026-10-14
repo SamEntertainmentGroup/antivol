@@ -82,7 +82,7 @@ class PlusActivity : Activity() {
             LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 dp(56)
-            ).apply { topMargin = dp(28) }
+            ).apply { topMargin = dp(40) }
         )
 
         setContentView(scroll)
