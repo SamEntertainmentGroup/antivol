@@ -338,7 +338,7 @@ class MainActivity : Activity() {
             ).apply {
                 setMargins(
                     dp(16),
-                    dp(34),
+                    dp(16),
                     dp(16),
                     0
                 )
