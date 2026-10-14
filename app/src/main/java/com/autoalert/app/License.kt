@@ -11,8 +11,10 @@ import javax.crypto.spec.SecretKeySpec
 
 object License {
 
-    // À remplacer par une clé secrète personnelle.
-    // La même clé devra être utilisée dans codes.php.
+    // Page Facebook professionnelle AutoAlert
+    const val MESSENGER = "https://m.me/61595316959719"
+
+    // Même clé que dans codes.php : à remplacer par une clé secrète personnelle
     private const val SECRET = "CHANGE-THIS-LONG-RANDOM-SECRET"
 
     private const val ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
@@ -23,6 +25,7 @@ object License {
     private fun today(): Long =
         System.currentTimeMillis() / DAY_MS - EPOCH_DAYS
 
+    // Code appareil : 8 caractères
     fun deviceCode(ctx: Context): String {
         val id = Settings.Secure.getString(
             ctx.contentResolver,
@@ -32,17 +35,17 @@ object License {
         val hash = MessageDigest.getInstance("SHA-256")
             .digest("antivol:$id".toByteArray())
 
-        var value = 0L
+        var v = 0L
         for (i in 0 until 5) {
-            value = (value shl 8) or (hash[i].toLong() and 0xFF)
+            v = (v shl 8) or (hash[i].toLong() and 0xFF)
         }
 
-        return encode(value, 8)
+        return encode(v, 8)
     }
 
     fun deviceCodeDisplay(ctx: Context): String {
-        val code = deviceCode(ctx)
-        return code.substring(0, 4) + "-" + code.substring(4)
+        val c = deviceCode(ctx)
+        return c.substring(0, 4) + "-" + c.substring(4)
     }
 
     // 0 = valide, 1 = invalide, 2 = expiré
@@ -60,11 +63,13 @@ object License {
         return 0
     }
 
+    // Date d'expiration si le déblocage est valide
     fun unlockedUntil(ctx: Context): Long? {
         val code = ctx.getSharedPreferences("p", Context.MODE_PRIVATE)
             .getString("unlock_code", null) ?: return null
 
         val expiry = expiryOf(ctx, code) ?: return null
+
         return if (expiry >= today()) expiry else null
     }
 
@@ -75,17 +80,18 @@ object License {
         DateFormat.getDateInstance(DateFormat.MEDIUM)
             .format(Date((day + EPOCH_DAYS) * DAY_MS))
 
+    // OUTILS INTERNES
     private fun normalize(raw: String): String =
         raw.uppercase().filter { ALPHABET.indexOf(it) >= 0 }
 
     private fun expiryOf(ctx: Context, code: String): Long? {
         if (code.length != 10) return null
 
-        val value = decode(code) ?: return null
-        val expiry = value ushr MAC_BITS
-        val macValue = value and ((1L shl MAC_BITS) - 1)
+        val v = decode(code) ?: return null
+        val expiry = v ushr MAC_BITS
+        val mac = v and ((1L shl MAC_BITS) - 1)
 
-        return if (mac(deviceCode(ctx), expiry) == macValue) {
+        return if (mac(deviceCode(ctx), expiry) == mac) {
             expiry
         } else {
             null
@@ -93,41 +99,41 @@ object License {
     }
 
     private fun mac(device: String, expiry: Long): Long {
-        val mac = Mac.getInstance("HmacSHA256")
-        mac.init(SecretKeySpec(SECRET.toByteArray(), "HmacSHA256"))
+        val m = Mac.getInstance("HmacSHA256")
+        m.init(SecretKeySpec(SECRET.toByteArray(), "HmacSHA256"))
 
-        val hash = mac.doFinal("$device:$expiry".toByteArray())
+        val h = m.doFinal("$device:$expiry".toByteArray())
 
-        var value = 0L
+        var v = 0L
         for (i in 0 until 5) {
-            value = (value shl 8) or (hash[i].toLong() and 0xFF)
+            v = (v shl 8) or (h[i].toLong() and 0xFF)
         }
 
-        return value and ((1L shl MAC_BITS) - 1)
+        return v and ((1L shl MAC_BITS) - 1)
     }
 
-    private fun encode(value: Long, length: Int): String {
-        val result = StringBuilder()
+    private fun encode(value: Long, len: Int): String {
+        val sb = StringBuilder()
 
-        for (i in length - 1 downTo 0) {
-            result.append(
+        for (i in len - 1 downTo 0) {
+            sb.append(
                 ALPHABET[((value shr (5 * i)) and 31L).toInt()]
             )
         }
 
-        return result.toString()
+        return sb.toString()
     }
 
-    private fun decode(code: String): Long? {
-        var value = 0L
+    private fun decode(s: String): Long? {
+        var v = 0L
 
-        for (char in code) {
-            val index = ALPHABET.indexOf(char)
-            if (index < 0) return null
+        for (c in s) {
+            val idx = ALPHABET.indexOf(c)
+            if (idx < 0) return null
 
-            value = (value shl 5) or index.toLong()
+            v = (v shl 5) or idx.toLong()
         }
 
-        return value
+        return v
     }
 }
