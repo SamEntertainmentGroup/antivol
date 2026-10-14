@@ -225,9 +225,6 @@ class MainActivity : Activity() {
                 Gravity.CENTER_HORIZONTAL
             )
         )
-
-        // Ombre du bouton
-        toggleBtn.elevation = dp(8).toFloat()
         
         root.addView(toggleBox)
 
