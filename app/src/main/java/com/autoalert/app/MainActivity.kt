@@ -220,8 +220,8 @@ class MainActivity : Activity() {
         toggleBox.addView(
             toggleBtn,
             FrameLayout.LayoutParams(
-                dp(220),
-                dp(220),
+                dp(300),
+                dp(300),
                 Gravity.CENTER_HORIZONTAL
             )
         )
