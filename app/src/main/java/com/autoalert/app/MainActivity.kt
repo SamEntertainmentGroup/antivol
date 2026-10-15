@@ -17,7 +17,6 @@ import android.provider.Settings
 import android.text.InputFilter
 import android.text.InputType
 import android.view.Gravity
-import android.view.HapticFeedbackConstants
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
@@ -264,7 +263,11 @@ class MainActivity : Activity() {
         toggleBtn.setOnClickListener {
 
             hideKeyboard()
-            toggleBtn.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+            try {
+                val v = getSystemService(VIBRATOR_SERVICE) as android.os.Vibrator
+                v.vibrate(android.os.VibrationEffect.createOneShot(50, android.os.VibrationEffect.DEFAULT_AMPLITUDE))
+            } catch (_: Exception) {
+            }
 
             if (prefs.getBoolean("active", false)) {
 
