@@ -17,6 +17,7 @@ import android.provider.Settings
 import android.text.InputFilter
 import android.text.InputType
 import android.view.Gravity
+import android.view.HapticFeedbackConstants
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
@@ -263,6 +264,7 @@ class MainActivity : Activity() {
         toggleBtn.setOnClickListener {
 
             hideKeyboard()
+            toggleBtn.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
 
             if (prefs.getBoolean("active", false)) {
 
