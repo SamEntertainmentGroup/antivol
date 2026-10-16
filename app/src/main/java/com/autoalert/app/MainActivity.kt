@@ -150,7 +150,7 @@ class MainActivity : Activity() {
             progressTintList = android.content.res.ColorStateList.valueOf(Color.rgb(35, 38, 45))
             thumbTintList = android.content.res.ColorStateList.valueOf(Color.rgb(35, 38, 45))
             tickMark = GradientDrawable().apply {
-                setSize(dp(2), dp(14))
+                setSize(dp(2), dp(6))
                 setColor(Color.rgb(150, 155, 165))
             }
             setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
