@@ -149,6 +149,10 @@ class MainActivity : Activity() {
             progress = currentMode
             progressTintList = android.content.res.ColorStateList.valueOf(Color.rgb(35, 38, 45))
             thumbTintList = android.content.res.ColorStateList.valueOf(Color.rgb(35, 38, 45))
+            tickMark = GradientDrawable().apply {
+                setSize(dp(2), dp(14))
+                setColor(Color.rgb(150, 155, 165))
+            }
             setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(bar: SeekBar?, value: Int, fromUser: Boolean) {
                     if (fromUser && value > 0 && !License.isUnlocked(this@MainActivity)) {
@@ -265,7 +269,7 @@ class MainActivity : Activity() {
             hideKeyboard()
             try {
                 val v = getSystemService(VIBRATOR_SERVICE) as android.os.Vibrator
-                v.vibrate(android.os.VibrationEffect.createOneShot(50, android.os.VibrationEffect.DEFAULT_AMPLITUDE))
+                v.vibrate(android.os.VibrationEffect.createOneShot(150, 255))
             } catch (_: Exception) {
             }
 
@@ -686,9 +690,13 @@ class MainActivity : Activity() {
             setColor(color)
         }
 
-        // Sensibilité modifiable uniquement
-        // lorsque la protection est arrêtée
-        sensitivityBar.isEnabled = !active
+        // Sensibilité grisée et verrouillée tant que la protection est active
+        val barTint = android.content.res.ColorStateList.valueOf(
+            if (active) Color.rgb(190, 195, 205) else Color.rgb(35, 38, 45)
+        )
+        sensitivityBar.progressTintList = barTint
+        sensitivityBar.thumbTintList = barTint
+        sensitivityBar.setOnTouchListener { _, _ -> active }
     }
 
     // Cadenas sur Sensible et Extrême tant qu'aucun code valide n'est saisi
